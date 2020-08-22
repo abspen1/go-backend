@@ -1,5 +1,5 @@
 # Go RESTful API
-Building a RESTful API using Go programming language. This has been transitioned to be used in my [website](https://abspen1.github.io)! Used as the backend for my 'Next Project' page within my [webapp repo](https://github.com/abspen1/abspen1.github.io)!
+Building a RESTful API using Go programming language. This has been transitioned to be used in my [website](https://abspen1.github.io)! Used as the backend for my 'Next Project' page within my [webapp repo](https://github.com/abspen1/abspen1.github.io/tree/backend)!
 
 ## Running
 ### Run main.go
