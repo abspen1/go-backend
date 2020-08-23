@@ -1,5 +1,5 @@
 # Go RESTful API
-Building a RESTful API using Go programming language. This has been transitioned to be used in my website! This is the backend for my 'Next Project' page.
+Building a RESTful API using Go programming language. This has been transitioned to be used in my [website](https://abspen1.github.io)! Used as the backend for my 'Next Project' page within my [webapp repo](https://github.com/abspen1/abspen1.github.io/tree/backend)!
 
 ## Running
 ### Run main.go
@@ -9,7 +9,7 @@ Building a RESTful API using Go programming language. This has been transitioned
 
 ### Test GET/POST requests
 * Using an app of your choosing (I use [Postman](https://www.postman.com/downloads/))
-* Put in your request URL (localhost:8081/articles)
+* Put in your request URL (localhost:8080/projects)
 * Either choose POST or GET request and check the body of the output
 
 ## Built to run with Docker
