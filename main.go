@@ -46,13 +46,12 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRequests() {
-
 	myRouter := mux.NewRouter().StrictSlash(true)
 
-	myRouter.HandleFunc("/", homePage)
-	myRouter.HandleFunc("/projects", allProjects).Methods("GET")
-	myRouter.HandleFunc("/projects", postProjects).Methods("POST")
-	log.Fatal(http.ListenAndServe("0.0.0.0:8080", myRouter))
+	myRouter.HandleFunc("/austinapi/", homePage)
+	myRouter.HandleFunc("/austinapi/projects", allProjects).Methods("GET")
+	myRouter.HandleFunc("/austinapi/projects", postProjects).Methods("POST")
+	log.Fatal(http.ListenAndServe(":8558", myRouter))
 }
 
 func main() {
