@@ -12,14 +12,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-/*
-*	Simple RESTful API created with GOlang
-*	This is using localhost:8080
-*
-*
-*
- */
-
 func allProjects(w http.ResponseWriter, r *http.Request) {
 	s := webapp.GetString()
 
