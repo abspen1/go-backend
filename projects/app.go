@@ -60,9 +60,10 @@ func GetString() []string {
 
 	var unencoded *Project
 
-	project1, _ := redis.Strings(client.Do("LRANGE", "projects", 0, -1))
+	project1, _ := redis.Strings(client.Do("SMEMBERS", "projects"))
+	fmt.Println(project1)
 
-	len, _ := redis.Int(client.Do("LLEN", "projects"))
+	len, _ := redis.Int(client.Do("SCARD", "projects"))
 
 	i := 0
 
@@ -92,14 +93,14 @@ func SetString(proj Project) {
 	fmt.Println("Connected!", response)
 
 	projEn, _ := json.Marshal(proj)
-	client.Do("RPUSH", "projects", projEn)
+	client.Do("SADD", "projects", projEn)
 	fmt.Println("Added to database")
 }
 
-// RmString function
+//RmString func
 func RmString(proj RmProject) bool {
 	secret := goDotEnvVariable("REDIS")
-	pass := goDotEnvVariable("PASSWORD")
+	pass := goDotEnvVariable("PASSWORD-TEST")
 
 	if pass != proj.Password {
 		fmt.Println("Incorrect Password")
@@ -120,9 +121,10 @@ func RmString(proj RmProject) bool {
 		Language:    proj.Language,
 		Description: proj.Description,
 	}
+	fmt.Println(proj2)
 
 	projEn, _ := json.Marshal(proj2)
-	client.Do("LREM", "projects", 0, projEn)
+	client.Do("SREM", "projects", projEn)
 	fmt.Println("Removed from database")
 	return true
 }

@@ -32,10 +32,29 @@ func goDotEnvVariable(key string) string {
 	return os.Getenv(key)
 }
 
+// SetString function
+func SetString(proj Project) {
+	secret := goDotEnvVariable("REDIS")
+
+	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	if err != nil {
+		log.Fatal(err)
+	}
+	response, err := client.Do("AUTH", secret)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Connected!", response)
+
+	projEn, _ := json.Marshal(proj)
+	client.Do("SADD", "projects-test", projEn)
+	fmt.Println("Added to database")
+}
+
 //RmString func
 func RmString(proj RmProject) bool {
 	secret := goDotEnvVariable("REDIS")
-	pass := goDotEnvVariable("PASSWORD")
+	pass := goDotEnvVariable("PASSWORD-TEST")
 
 	if pass != proj.Password {
 		fmt.Println("Incorrect Password")
@@ -56,9 +75,10 @@ func RmString(proj RmProject) bool {
 		Language:    proj.Language,
 		Description: proj.Description,
 	}
+	fmt.Println(proj2)
 
 	projEn, _ := json.Marshal(proj2)
-	client.Do("LREM", "projects", 0, projEn)
+	client.Do("SREM", "projects-test", projEn)
 	fmt.Println("Removed from database")
 	return true
 }
@@ -79,28 +99,34 @@ func GetProjects() {
 
 	var unencoded *Project
 
-	project1, _ := redis.Strings(client.Do("LRANGE", "projects", 0, -1))
+	project1, _ := redis.Strings(client.Do("SMEMBERS", "projects-test"))
+	fmt.Println(project1)
 
-	len, _ := redis.Int(client.Do("LLEN", "projects"))
+	len, _ := redis.Int(client.Do("SCARD", "projects-test"))
+	fmt.Println(len)
 
 	i := 0
-
-	var s []string
-
-	for i < len {
-		json.Unmarshal([]byte(project1[i]), &unencoded)
-		s = append(s, unencoded.Language)
-		s = append(s, unencoded.Description)
-		i++
+	if len > 0 {
+		for i < len {
+			json.Unmarshal([]byte(project1[i]), &unencoded)
+			fmt.Println(unencoded.Language)
+			fmt.Println(unencoded.Description)
+			i++
+		}
 	}
 }
 
 func main() {
-	// proj := RmProject{
+	proj := RmProject{
+		Language:    "PYTHON",
+		Description: "Testing This Out",
+		Password:    "Secure97",
+	}
+	// proj2 := Project{
 	// 	Language:    "PYTHON",
-	// 	Description: "Machine learning",
-	// 	Password:    "Secure97",
+	// 	Description: "Testing This Out",
 	// }
-	// RmString(proj)
+	RmString(proj)
+	// SetString(proj2)
 	GetProjects()
 }
