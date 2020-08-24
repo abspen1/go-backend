@@ -42,7 +42,8 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/", homePage)
 	myRouter.HandleFunc("/austinapi/projects", allProjects).Methods("GET")
 	myRouter.HandleFunc("/austinapi/projects", postProjects).Methods("POST")
-	log.Fatal(http.ListenAndServe(":8558", myRouter))
+	handler := c.Handler(myRouter)
+	log.Fatal(http.ListenAndServe(":8558", handler))
 }
 
 func main() {
