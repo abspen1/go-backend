@@ -65,7 +65,6 @@ func sendEmail(w http.ResponseWriter, r *http.Request) {
 
 	email.SendEmail(info)
 	fmt.Fprintf(w, string(body))
-	fmt.Fprintf(w, "Test POST endpoint worked!")
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
