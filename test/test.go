@@ -47,7 +47,8 @@ func SetString(proj Project) {
 	fmt.Println("Connected!", response)
 
 	projEn, _ := json.Marshal(proj)
-	client.Do("SADD", "projects-test", projEn)
+	// fmt.Println(proj)
+	client.Do("SADD", "projects", projEn)
 	fmt.Println("Added to database")
 }
 
@@ -78,7 +79,7 @@ func RmString(proj RmProject) bool {
 	fmt.Println(proj2)
 
 	projEn, _ := json.Marshal(proj2)
-	client.Do("SREM", "projects-test", projEn)
+	client.Do("SREM", "projects", projEn)
 	fmt.Println("Removed from database")
 	return true
 }
@@ -99,10 +100,12 @@ func GetProjects() {
 
 	var unencoded *Project
 
-	project1, _ := redis.Strings(client.Do("SMEMBERS", "projects-test"))
+	client.Do("DEL", "projects")
+
+	project1, _ := redis.Strings(client.Do("SMEMBERS", "projects"))
 	fmt.Println(project1)
 
-	len, _ := redis.Int(client.Do("SCARD", "projects-test"))
+	len, _ := redis.Int(client.Do("SCARD", "projects"))
 	fmt.Println(len)
 
 	i := 0
@@ -117,16 +120,22 @@ func GetProjects() {
 }
 
 func main() {
-	proj := RmProject{
-		Language:    "PYTHON",
-		Description: "Testing This Out",
-		Password:    "Secure97",
-	}
+	// 	var proj Project
+	// 	proj.Language = "PYTHON"
+	// 	proj.Description = "Something test"
+	// fullStr = proj.Language + ""
+
+	// SetString(proj)
+	// proj := RmProject{
+	// 	Language:    "PYTHON",
+	// 	Description: "Testing This Out",
+	// 	Password:    "Secure97",
+	// }
 	// proj2 := Project{
 	// 	Language:    "PYTHON",
 	// 	Description: "Testing This Out",
 	// }
-	RmString(proj)
+	// RmString(proj)
 	// SetString(proj2)
 	GetProjects()
 }
