@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/abspen1/restful-go/email"
+
 	"github.com/gomodule/redigo/redis"
 	"github.com/joho/godotenv"
 )
@@ -137,5 +139,11 @@ func main() {
 	// }
 	// RmString(proj)
 	// SetString(proj2)
-	GetProjects()
+	// GetProjects()
+	var info email.Info
+
+	info.Name = "Austin"
+	info.Email = "abspencer2097@gmail.com"
+	info.Message = "Hello World"
+	email.SendEmail(info)
 }

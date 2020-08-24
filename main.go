@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/abspen1/restful-go/email"
+
 	"github.com/abspen1/restful-go/projects"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
@@ -51,6 +53,21 @@ func postRmprojects(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprintf(w, "Test POST endpoint worked!")
 }
 
+func sendEmail(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var info email.Info
+	_ = json.Unmarshal(body, &info)
+
+	email.SendEmail(info)
+	fmt.Fprintf(w, string(body))
+	fmt.Fprintf(w, "Test POST endpoint worked!")
+}
+
 func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Austin's API, nothing to see here!")
 }
@@ -67,6 +84,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/projects", allProjects).Methods("GET")
 	myRouter.HandleFunc("/austinapi/projects", postProjects).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rmprojects", postRmprojects).Methods("POST")
+	myRouter.HandleFunc("/austinapi/email", sendEmail).Methods("POST")
 	handler := c.Handler(myRouter)
 	log.Fatal(http.ListenAndServe(":8558", handler))
 }

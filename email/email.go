@@ -21,9 +21,9 @@ func (s *smtpServer) Address() string {
 
 // Info struct
 type Info struct {
-	name    string
-	email   string
-	message string
+	Name    string
+	Email   string
+	Message string
 }
 
 func goDotEnvVariable(key string) string {
@@ -40,17 +40,20 @@ func SendEmail(info Info) {
 	// Sender data.
 	from := goDotEnvVariable("EMAIL")
 	password := goDotEnvVariable("EMAIL-PASS")
-	// Receiver email address.
+	// Receiver Email address.
 	to := []string{
 		from,
 	}
 	// smtp server configuration.
 	smtpServer := smtpServer{host: "smtp.gmail.com", port: "587"}
 	// Message.
-	message := []byte(fmt.Sprintf("name: %s  email: %s message: %s", info.name, info.email, info.message))
+	strMessage := fmt.Sprintf("Name: %s  Email: %s Message: %s", info.Name, info.Email, info.Message)
+	msg := "From: " + from + "\n" + "Subject: webapp\n\n" + strMessage
+	// fmt.Println(strMessage)
+	message := []byte(msg)
 	// Authentication.
 	auth := smtp.PlainAuth("", from, password, smtpServer.host)
-	// Sending email.
+	// Sending Email.
 	err := smtp.SendMail(smtpServer.Address(), auth, from, to, message)
 	if err != nil {
 		fmt.Println(err)
