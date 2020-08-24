@@ -7,13 +7,12 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/abspen1/restful-go/webapp"
-
+	"github.com/abspen1/restful-go/projects"
 	"github.com/gorilla/mux"
 )
 
 func allProjects(w http.ResponseWriter, r *http.Request) {
-	s := webapp.GetString()
+	s := projects.GetString()
 
 	json.NewEncoder(w).Encode(s)
 }
@@ -25,9 +24,9 @@ func postProjects(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 		info, _ = ioutil.ReadAll(r.Body)
 	}
-	var proj webapp.Project
+	var proj projects.Project
 	_ = json.Unmarshal(info, &proj)
-	webapp.SetString(proj)
+	projects.SetString(proj)
 	fmt.Fprintf(w, string(info))
 
 	fmt.Fprintf(w, "Test POST endpoint worked!")

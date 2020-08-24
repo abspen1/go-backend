@@ -1,4 +1,4 @@
-package webapp
+package projects
 
 import (
 	"encoding/json"
