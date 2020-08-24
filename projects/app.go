@@ -37,6 +37,13 @@ type Project struct {
 	Description string
 }
 
+//RmProject struct
+type RmProject struct {
+	Language    string
+	Description string
+	Password    string
+}
+
 // GetString function
 func GetString() []string {
 	secret := goDotEnvVariable("REDIS")
@@ -87,4 +94,35 @@ func SetString(proj Project) {
 	projEn, _ := json.Marshal(proj)
 	client.Do("RPUSH", "projects", projEn)
 	fmt.Println("Added to database")
+}
+
+// RmString function
+func RmString(proj RmProject) bool {
+	secret := goDotEnvVariable("REDIS")
+	pass := goDotEnvVariable("PASSWORD")
+
+	if pass != proj.Password {
+		fmt.Println("Incorrect Password")
+		return false
+	}
+
+	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	if err != nil {
+		log.Fatal(err)
+	}
+	response, err := client.Do("AUTH", secret)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Connected!", response)
+
+	proj2 := Project{
+		Language:    proj.Language,
+		Description: proj.Description,
+	}
+
+	projEn, _ := json.Marshal(proj2)
+	client.Do("LREM", "projects", 0, projEn)
+	fmt.Println("Removed from database")
+	return true
 }

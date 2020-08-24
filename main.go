@@ -30,11 +30,29 @@ func postProjects(w http.ResponseWriter, r *http.Request) {
 	projects.SetString(proj)
 	fmt.Fprintf(w, string(info))
 
-	fmt.Fprintf(w, "Test POST endpoint worked!")
+	// fmt.Fprintf(w, "Test POST endpoint worked!")
+}
+
+func postRmprojects(w http.ResponseWriter, r *http.Request) {
+	var info []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		info, _ = ioutil.ReadAll(r.Body)
+	}
+	var proj projects.RmProject
+	_ = json.Unmarshal(info, &proj)
+	if projects.RmString(proj) {
+		fmt.Fprintf(w, "POST remove worked!")
+	} else {
+		fmt.Fprintf(w, "Error")
+	}
+
+	// fmt.Fprintf(w, "Test POST endpoint worked!")
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Homepage Endpoint Hit")
+	fmt.Fprintf(w, "Austin's API, nothing to see here!")
 }
 
 func handleRequests() {
@@ -48,6 +66,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/", homePage)
 	myRouter.HandleFunc("/austinapi/projects", allProjects).Methods("GET")
 	myRouter.HandleFunc("/austinapi/projects", postProjects).Methods("POST")
+	myRouter.HandleFunc("/austinapi/rmprojects", postRmprojects).Methods("POST")
 	handler := c.Handler(myRouter)
 	log.Fatal(http.ListenAndServe(":8558", handler))
 }
