@@ -9,6 +9,7 @@ import (
 
 	"github.com/abspen1/restful-go/projects"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 func allProjects(w http.ResponseWriter, r *http.Request) {
@@ -37,6 +38,11 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRequests() {
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"https://abspen1.github.io", "https://abspen1.github.io/next-project/np.html"},
+		AllowCredentials: true,
+		Debug:            false,
+	})
 	myRouter := mux.NewRouter().StrictSlash(true)
 
 	myRouter.HandleFunc("/austinapi/", homePage)
