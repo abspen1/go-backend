@@ -21,3 +21,8 @@ Building a RESTful API using Go programming language. This has been transitioned
 ## 📁 webapp
 ### This is an imported folder I use to connect to redis
 * The main bulk of working with get/post requests
+
+## Checkmail Package
+* Checking to make sure the email given is a valid email
+* Already a simple format check on the front end to catch obvious errors
+    * This is much more ellaborate of a check
