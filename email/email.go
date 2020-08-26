@@ -36,7 +36,7 @@ func goDotEnvVariable(key string) string {
 }
 
 // SendEmail function
-func SendEmail(info Info) {
+func SendEmail(info Info) bool {
 	// Sender data.
 	from := goDotEnvVariable("EMAIL")
 	password := goDotEnvVariable("EMAIL-PASS")
@@ -57,7 +57,8 @@ func SendEmail(info Info) {
 	err := smtp.SendMail(smtpServer.Address(), auth, from, to, message)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return false
 	}
 	fmt.Println("Email Sent!")
+	return true
 }

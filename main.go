@@ -10,6 +10,7 @@ import (
 	"github.com/abspen1/restful-go/email"
 
 	"github.com/abspen1/restful-go/projects"
+	"https://github.com/badoux/checkmail"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )
@@ -68,8 +69,21 @@ func sendEmail(w http.ResponseWriter, r *http.Request) {
 	var info email.Info
 	_ = json.Unmarshal(body, &info)
 
-	email.SendEmail(info)
-	fmt.Fprintf(w, string(body))
+	err := checkmail.ValidateFormat(info.Email)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Fprintf(w, "Format Error")
+	}
+	err := checkmail.ValidateHost(info.Email)
+	if smtpErr, ok := err.(checkmail.SmtpError); ok && err != nil {
+		fmt.Printf("Code: %s, Msg: %s", smtpErr.Code(), smtpErr)
+		fmt.Fprintf(w, "Error")
+	}
+
+	if email.SendEmail(info) {
+		fmt.Fprintf(w, "Email sent successfully")
+	}
+	fmt.Fprintf(w, "Email not sent")
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
