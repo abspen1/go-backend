@@ -70,18 +70,22 @@ func sendEmail(w http.ResponseWriter, r *http.Request) {
 	_ = json.Unmarshal(body, &info)
 
 	err := checkmail.ValidateFormat(info.Email)
+
 	if err != nil {
 		fmt.Println(err)
 		fmt.Fprintf(w, "Format Error")
+		return
 	}
 	err = checkmail.ValidateHost(info.Email)
 	if smtpErr, ok := err.(checkmail.SmtpError); ok && err != nil {
 		fmt.Printf("Code: %s, Msg: %s", smtpErr.Code(), smtpErr)
 		fmt.Fprintf(w, "Error")
+		return
 	}
 
 	if email.SendEmail(info) {
 		fmt.Fprintf(w, "Email sent successfully")
+		return
 	}
 	fmt.Fprintf(w, "Email not sent")
 }
