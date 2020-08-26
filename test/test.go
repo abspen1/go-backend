@@ -6,8 +6,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/abspen1/restful-go/email"
-
 	"github.com/gomodule/redigo/redis"
 	"github.com/joho/godotenv"
 )
@@ -100,9 +98,9 @@ func GetProjects() {
 	}
 	fmt.Println("Connected!", response)
 
-	var unencoded *Project
-
 	client.Do("DEL", "projects")
+
+	var unencoded *Project
 
 	project1, _ := redis.Strings(client.Do("SMEMBERS", "projects"))
 	fmt.Println(project1)
@@ -121,6 +119,40 @@ func GetProjects() {
 	}
 }
 
+func exists(proj RmProject) bool {
+	secret := goDotEnvVariable("REDIS")
+	pass := goDotEnvVariable("PASSWORD-TEST")
+
+	if pass != proj.Password {
+		fmt.Println("Incorrect Password")
+		return false
+	}
+
+	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	if err != nil {
+		log.Fatal(err)
+	}
+	response, err := client.Do("AUTH", secret)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Connected!", response)
+
+	proj2 := Project{
+		Language:    proj.Language,
+		Description: proj.Description,
+	}
+	fmt.Println(proj2)
+
+	projEn, _ := json.Marshal(proj2)
+
+	exist, _ := redis.Bool(client.Do("SISMEMBER", "projects", projEn))
+
+	fmt.Println(exist)
+	return true
+
+}
+
 func main() {
 	// 	var proj Project
 	// 	proj.Language = "PYTHON"
@@ -128,11 +160,13 @@ func main() {
 	// fullStr = proj.Language + ""
 
 	// SetString(proj)
+	GetProjects()
 	// proj := RmProject{
 	// 	Language:    "PYTHON",
-	// 	Description: "Testing This Out",
+	// 	Description: "Machine learning",
 	// 	Password:    "Secure97",
 	// }
+	// fmt.Println(exists(proj))
 	// proj2 := Project{
 	// 	Language:    "PYTHON",
 	// 	Description: "Testing This Out",
@@ -140,10 +174,10 @@ func main() {
 	// RmString(proj)
 	// SetString(proj2)
 	// GetProjects()
-	var info email.Info
+	// var info email.Info
 
-	info.Name = "Austin"
-	info.Email = "abspencer2097@gmail.com"
-	info.Message = "Hello World"
-	email.SendEmail(info)
+	// info.Name = "Austin"
+	// info.Email = "abspencer2097@gmail.com"
+	// info.Message = "Hello World"
+	// email.SendEmail(info)
 }

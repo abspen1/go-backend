@@ -44,10 +44,15 @@ func postRmprojects(w http.ResponseWriter, r *http.Request) {
 	}
 	var proj projects.RmProject
 	_ = json.Unmarshal(info, &proj)
-	if projects.RmString(proj) {
-		fmt.Fprintf(w, "POST remove worked!")
+
+	if projects.CheckPass(proj) {
+		if projects.RmString(proj) {
+			fmt.Fprintf(w, "POST remove worked!")
+		} else {
+			fmt.Fprintf(w, "Error")
+		}
 	} else {
-		fmt.Fprintf(w, "Error")
+		fmt.Fprintf(w, "Err")
 	}
 
 	// fmt.Fprintf(w, "Test POST endpoint worked!")

@@ -100,12 +100,6 @@ func SetString(proj Project) {
 //RmString func
 func RmString(proj RmProject) bool {
 	secret := goDotEnvVariable("REDIS")
-	pass := goDotEnvVariable("PASSWORD-TEST")
-
-	if pass != proj.Password {
-		fmt.Println("Incorrect Password")
-		return false
-	}
 
 	client, err := redis.Dial("tcp", "10.10.10.1:6379")
 	if err != nil {
@@ -126,5 +120,16 @@ func RmString(proj RmProject) bool {
 	projEn, _ := json.Marshal(proj2)
 	client.Do("SREM", "projects", projEn)
 	fmt.Println("Removed from database")
+	return true
+}
+
+// CheckPass function
+func CheckPass(proj RmProject) bool {
+	pass := goDotEnvVariable("PASSWORD")
+
+	if pass != proj.Password {
+		fmt.Println("Incorrect Password")
+		return false
+	}
 	return true
 }
