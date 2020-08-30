@@ -133,7 +133,7 @@ func getRPS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rpsUser = rps.SaveData(rpsUser)
+	rpsUser = rps.GetData(rpsUser)
 
 	json.NewEncoder(w).Encode(rpsUser)
 }
