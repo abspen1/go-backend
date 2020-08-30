@@ -114,6 +114,7 @@ func getRPS(w http.ResponseWriter, r *http.Request) {
 		info, _ = ioutil.ReadAll(r.Body)
 	} else {
 		fmt.Fprintf(w, "Rock Paper Scissors backend")
+		return
 	}
 	var rpsUser rps.User
 	_ = json.Unmarshal(info, &rpsUser)
