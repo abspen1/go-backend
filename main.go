@@ -144,7 +144,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/rps", getRPS).Methods("GET")
 	myRouter.HandleFunc("/austinapi/rps", postRPS).Methods("POST")
 	handler := c.Handler(myRouter)
-	log.Fatal(http.ListenAndServe("0.0.0.0:8080", handler))
+	log.Fatal(http.ListenAndServe(":8558", handler))
 }
 
 func main() {
