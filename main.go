@@ -106,15 +106,12 @@ func postRPS(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(rpsUser)
 }
 
-func getRPS(w http.ResponseWriter, r *http.Request) {
+func postRPSLogin(w http.ResponseWriter, r *http.Request) {
 	var info []byte
 
 	if r.Body != nil {
 		defer r.Body.Close()
 		info, _ = ioutil.ReadAll(r.Body)
-	} else {
-		fmt.Fprintf(w, "Rock Paper Scissors backend")
-		return
 	}
 	var rpsUser rps.User
 	_ = json.Unmarshal(info, &rpsUser)
@@ -123,6 +120,7 @@ func getRPS(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(rpsUser.Username)
 		fmt.Fprintf(w, "Format Error")
 		return
 	}
@@ -138,6 +136,14 @@ func getRPS(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(rpsUser.Username)
 
 	json.NewEncoder(w).Encode(rpsUser)
+}
+
+func getRPSLogin(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Rock Paper Scissors game login endpoint, nothing to see here!")
+}
+
+func getRPS(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Rock Paper Scissors game save endpoint, nothing to see here!")
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
@@ -157,8 +163,10 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/projects", postProjects).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rmprojects", postRmprojects).Methods("POST")
 	myRouter.HandleFunc("/austinapi/email", sendEmail).Methods("POST")
-	myRouter.HandleFunc("/austinapi/rps", getRPS).Methods("GET")
+	myRouter.HandleFunc("/austinapi/rps/login", postRPSLogin).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rps", postRPS).Methods("POST")
+	myRouter.HandleFunc("/austinapi/rps/login", getRPSLogin).Methods("GET")
+	myRouter.HandleFunc("/austinapi/rps", getRPS).Methods("GET")
 	handler := c.Handler(myRouter)
 	log.Fatal(http.ListenAndServe(":8558", handler))
 }

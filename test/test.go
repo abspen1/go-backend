@@ -153,6 +153,23 @@ func exists(proj RmProject) bool {
 
 }
 
+func setMyScore(user string) {
+	secret := goDotEnvVariable("REDIS")
+
+	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	if err != nil {
+		log.Fatal(err)
+	}
+	response, err := client.Do("AUTH", secret)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Connected!", response)
+
+	client.Do("HSET", user, "wins", "400")
+	client.Do("HSET", user, "losses", "30")
+}
+
 func main() {
 	// 	var proj Project
 	// 	proj.Language = "PYTHON"
@@ -160,7 +177,7 @@ func main() {
 	// fullStr = proj.Language + ""
 
 	// SetString(proj)
-	GetProjects()
+	// GetProjects()
 	// proj := RmProject{
 	// 	Language:    "PYTHON",
 	// 	Description: "Machine learning",
@@ -180,4 +197,5 @@ func main() {
 	// info.Email = "abspencer2097@gmail.com"
 	// info.Message = "Hello World"
 	// email.SendEmail(info)
+	setMyScore("abspencer2097@gmail.com")
 }
