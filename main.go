@@ -120,7 +120,6 @@ func postRPSLogin(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		fmt.Println(err)
-		fmt.Println(rpsUser.Username)
 		fmt.Fprintf(w, "Format Error")
 		return
 	}
@@ -132,8 +131,6 @@ func postRPSLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rpsUser = rps.GetData(rpsUser)
-
-	fmt.Println(rpsUser.Username)
 
 	json.NewEncoder(w).Encode(rpsUser)
 }
