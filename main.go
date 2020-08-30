@@ -101,6 +101,23 @@ func postRPS(w http.ResponseWriter, r *http.Request) {
 	var rpsUser rps.User
 	_ = json.Unmarshal(info, &rpsUser)
 
+	rpsUser = rps.SaveData(rpsUser)
+
+	json.NewEncoder(w).Encode(rpsUser)
+}
+
+func getRPS(w http.ResponseWriter, r *http.Request) {
+	var info []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		info, _ = ioutil.ReadAll(r.Body)
+	} else {
+		fmt.Fprintf(w, "Rock Paper Scissors backend")
+	}
+	var rpsUser rps.User
+	_ = json.Unmarshal(info, &rpsUser)
+
 	err := checkmail.ValidateFormat(rpsUser.Username)
 
 	if err != nil {
@@ -118,10 +135,6 @@ func postRPS(w http.ResponseWriter, r *http.Request) {
 	rpsUser = rps.SaveData(rpsUser)
 
 	json.NewEncoder(w).Encode(rpsUser)
-}
-
-func getRPS(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Rock Paper Scissors backend")
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
