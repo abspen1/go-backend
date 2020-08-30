@@ -47,19 +47,7 @@ func SaveData(user User) User {
 		client.Do("HSET", user.Username, "losses", user.Losses)
 		return user
 	}
-	hash, _ := redis.StringMap(client.Do("HGETALL", user.Username))
 
-	for key, value := range hash {
-		if key == "wins" {
-			wins, _ := strconv.Atoi(value)
-			fmt.Println("wins:", wins)
-			user.Wins = user.Wins + wins
-		} else if key == "losses" {
-			losses, _ := strconv.Atoi(value)
-			fmt.Println("losses:", losses)
-			user.Losses = user.Losses + losses
-		}
-	}
 	client.Do("HSET", user.Username, "wins", user.Wins)
 	client.Do("HSET", user.Username, "losses", user.Losses)
 

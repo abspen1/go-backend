@@ -135,6 +135,8 @@ func getRPS(w http.ResponseWriter, r *http.Request) {
 
 	rpsUser = rps.GetData(rpsUser)
 
+	fmt.Println(rpsUser.Username)
+
 	json.NewEncoder(w).Encode(rpsUser)
 }
 
