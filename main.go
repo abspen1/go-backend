@@ -10,12 +10,13 @@ import (
 	"github.com/abspen1/restful-go/email"
 
 	"github.com/abspen1/restful-go/projects"
+	"github.com/abspen1/restful-go/rps"
 	"github.com/badoux/checkmail"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )
 
-func allProjects(w http.ResponseWriter, r *http.Request) {
+func getProjects(w http.ResponseWriter, r *http.Request) {
 	s := projects.GetString()
 
 	json.NewEncoder(w).Encode(s)
@@ -90,6 +91,39 @@ func sendEmail(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Email not sent")
 }
 
+func postRPS(w http.ResponseWriter, r *http.Request) {
+	var info []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		info, _ = ioutil.ReadAll(r.Body)
+	}
+	var rpsUser rps.User
+	_ = json.Unmarshal(info, &rpsUser)
+
+	err := checkmail.ValidateFormat(rpsUser.Username)
+
+	if err != nil {
+		fmt.Println(err)
+		fmt.Fprintf(w, "Format Error")
+		return
+	}
+	err = checkmail.ValidateHost(rpsUser.Username)
+	if smtpErr, ok := err.(checkmail.SmtpError); ok && err != nil {
+		fmt.Printf("Code: %s, Msg: %s", smtpErr.Code(), smtpErr)
+		fmt.Fprintf(w, "Error")
+		return
+	}
+
+	rpsUser = rps.SaveData(rpsUser)
+
+	json.NewEncoder(w).Encode(rpsUser)
+}
+
+func getRPS(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Rock Paper Scissors backend")
+}
+
 func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Austin's API, nothing to see here!")
 }
@@ -103,12 +137,14 @@ func handleRequests() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 
 	myRouter.HandleFunc("/austinapi/", homePage)
-	myRouter.HandleFunc("/austinapi/projects", allProjects).Methods("GET")
+	myRouter.HandleFunc("/austinapi/projects", getProjects).Methods("GET")
 	myRouter.HandleFunc("/austinapi/projects", postProjects).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rmprojects", postRmprojects).Methods("POST")
 	myRouter.HandleFunc("/austinapi/email", sendEmail).Methods("POST")
+	myRouter.HandleFunc("/austinapi/rps", getRPS).Methods("GET")
+	myRouter.HandleFunc("/austinapi/rps", postRPS).Methods("POST")
 	handler := c.Handler(myRouter)
-	log.Fatal(http.ListenAndServe(":8558", handler))
+	log.Fatal(http.ListenAndServe("0.0.0.0:8080", handler))
 }
 
 func main() {
