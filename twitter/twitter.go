@@ -15,6 +15,7 @@ type Data struct {
 	TweetsLiked int
 	Tweets      int
 	TweetsRead  int
+	LatestTweet string
 }
 
 func goDotEnvVariable(key string) string {
@@ -44,6 +45,7 @@ func GetTwitterData() Data {
 	data.TweetsLiked, _ = redis.Int(client.Do("GET", "tendie_favorites"))
 	data.Tweets, _ = redis.Int(client.Do("GET", "tendie_statuses"))
 	data.TweetsRead, _ = redis.Int(client.Do("GET", "tendie_read"))
+	data.LatestTweet, _ = redis.String(client.Do("GET", "tendie_recent"))
 	fmt.Println(data)
 	return data
 }
