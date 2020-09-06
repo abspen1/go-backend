@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/abspen1/restful-go/botsffl"
+
 	"github.com/abspen1/restful-go/twitter"
 
 	"github.com/abspen1/restful-go/email"
@@ -150,6 +152,12 @@ func getTwitterData(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(data)
 }
 
+func getBotsFFL(w http.ResponseWriter, r *http.Request) {
+	leaders := botsffl.SetLeaders()
+
+	json.NewEncoder(w).Encode(leaders)
+}
+
 func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Austin's API, nothing to see here!")
 }
@@ -172,6 +180,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/rps/login", getRPSLogin).Methods("GET")
 	myRouter.HandleFunc("/austinapi/rps", getRPS).Methods("GET")
 	myRouter.HandleFunc("/austinapi/tendie-intern", getTwitterData).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl", getBotsFFL).Methods("GET")
 	handler := c.Handler(myRouter)
 	log.Fatal(http.ListenAndServe(":8558", handler))
 }

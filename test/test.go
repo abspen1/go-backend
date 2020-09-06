@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/abspen1/restful-go/botsffl"
+
 	"github.com/gomodule/redigo/redis"
 	"github.com/joho/godotenv"
 )
@@ -197,5 +199,6 @@ func main() {
 	// info.Email = "abspencer2097@gmail.com"
 	// info.Message = "Hello World"
 	// email.SendEmail(info)
-	setMyScore("abspencer2097@gmail.com")
+	// setMyScore("abspencer2097@gmail.com")
+	fmt.Println(botsffl.SetLeaders())
 }
