@@ -181,7 +181,7 @@ func (status *Leaders) setStandingsMw(client redis.Conn) {
 	}
 }
 
-func (status Leaders) setPointsMw(client redis.Conn) {
+func (status *Leaders) setPointsMw(client redis.Conn) {
 	i := 1
 	for i < 13 {
 		switch i {
@@ -248,7 +248,7 @@ func (status *Leaders) setStandingsNe(client redis.Conn) {
 	}
 }
 
-func (status Leaders) setPointsNe(client redis.Conn) {
+func (status *Leaders) setPointsNe(client redis.Conn) {
 	i := 1
 	for i < 13 {
 		switch i {
@@ -315,7 +315,7 @@ func (status *Leaders) setStandingsSe(client redis.Conn) {
 	}
 }
 
-func (status Leaders) setPointsSe(client redis.Conn) {
+func (status *Leaders) setPointsSe(client redis.Conn) {
 	i := 1
 	for i < 13 {
 		switch i {
@@ -382,7 +382,7 @@ func (status *Leaders) setStandingsW(client redis.Conn) {
 	}
 }
 
-func (status Leaders) setPointsW(client redis.Conn) {
+func (status *Leaders) setPointsW(client redis.Conn) {
 	i := 1
 	for i < 13 {
 		switch i {

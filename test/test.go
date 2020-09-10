@@ -6,8 +6,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/abspen1/restful-go/botsffl"
-
 	"github.com/gomodule/redigo/redis"
 	"github.com/joho/godotenv"
 )
@@ -172,6 +170,23 @@ func setMyScore(user string) {
 	client.Do("HSET", user, "losses", "30")
 }
 
+func testPoints() {
+	secret := goDotEnvVariable("REDIS")
+
+	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	if err != nil {
+		log.Fatal(err)
+	}
+	response, err := client.Do("AUTH", secret)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Connected!", response)
+
+	points, _ := redis.String(client.Do("GET", "mw_points_1"))
+	fmt.Println(points)
+}
+
 func main() {
 	// 	var proj Project
 	// 	proj.Language = "PYTHON"
@@ -200,5 +215,6 @@ func main() {
 	// info.Message = "Hello World"
 	// email.SendEmail(info)
 	// setMyScore("abspencer2097@gmail.com")
-	fmt.Println(botsffl.SetLeaders())
+	// fmt.Println(botsffl.SetLeaders())
+	testPoints()
 }
