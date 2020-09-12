@@ -157,6 +157,38 @@ func getBotsFFL(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(leaders)
 }
+func postBotsFFL(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var info email.BotsFFL
+	_ = json.Unmarshal(body, &info)
+
+	err := checkmail.ValidateFormat(info.Email)
+
+	if err != nil {
+		fmt.Println(err)
+		fmt.Fprintf(w, "Format Error")
+		return
+	}
+
+	err = checkmail.ValidateHost(info.Email)
+	if smtpErr, ok := err.(checkmail.SmtpError); ok && err != nil {
+		fmt.Printf("Code: %s, Msg: %s", smtpErr.Code(), smtpErr)
+		fmt.Fprintf(w, "Error")
+		return
+	}
+
+	if email.SaveBotsInfo(info) {
+		botsffl.SaveProspect(info)
+		fmt.Fprintf(w, "Email sent successfully")
+		return
+	}
+	fmt.Fprintf(w, "Email not sent")
+}
 
 func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Austin's API, nothing to see here!")
@@ -181,6 +213,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/rps", getRPS).Methods("GET")
 	myRouter.HandleFunc("/austinapi/tendie-intern", getTwitterData).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl", getBotsFFL).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl", postBotsFFL).Methods("POST")
 	handler := c.Handler(myRouter)
 	log.Fatal(http.ListenAndServe(":8558", handler))
 }

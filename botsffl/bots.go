@@ -4,6 +4,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/abspen1/restful-go/email"
+
 	"github.com/gomodule/redigo/redis"
 	"github.com/joho/godotenv"
 )
@@ -413,4 +415,21 @@ func (status *Leaders) setPointsW(client redis.Conn) {
 		}
 		i++
 	}
+}
+
+// SaveProspect function
+func SaveProspect(info email.BotsFFL) {
+	secret := goDotEnvVariable("REDIS")
+
+	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = client.Do("AUTH", secret)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer client.Close()
+	client.Do("HSET", "BotsProspectsState", info.Email, info.State)
+	client.Do("HSET", "BotsProspectsName", info.Email, info.Name)
 }
