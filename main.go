@@ -196,7 +196,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 
 func handleRequests() {
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"https://abspen1.github.io", "https://abspen1.github.io/next-project/np.html"},
+		AllowedOrigins:   []string{"https://abspen1.github.io", "https://austinspencer.works"},
 		AllowCredentials: true,
 		Debug:            false,
 	})
