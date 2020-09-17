@@ -118,7 +118,7 @@ func SendBdayEmail(info Birthday) bool {
 	// smtp server configuration.
 	smtpServer := smtpServer{host: "smtp.gmail.com", port: "587"}
 	// Message.
-	strMessage := fmt.Sprintf("Happy birthday %s! Here is a joke to get your day started right!\n\n\n%s\n\n%s\n\n\n\n\nLove,\nAustin", info.Name, info.JokeSetup, info.JokePunchLine)
+	strMessage := fmt.Sprintf("Happy birthday %s! Here is a joke to get your day started right!\n\n\n%s\n\n%s\n\n\n\n\nBest Regards,\n\nAustin", info.Name, info.JokeSetup, info.JokePunchLine)
 	msg := "From: " + from + "\n" +
 		"To: " + info.Email + "\n" +
 		"Subject: Happy Birthday\n\n" + strMessage
