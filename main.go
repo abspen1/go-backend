@@ -203,7 +203,6 @@ func postBdayEmail(w http.ResponseWriter, r *http.Request) {
 	}
 	var info email.Birthday
 	_ = json.Unmarshal(body, &info)
-	fmt.Println(info)
 
 	if email.SendBdayEmail(info) {
 		fmt.Fprintf(w, "Email sent successfully")
