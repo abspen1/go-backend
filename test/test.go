@@ -1,26 +1,48 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
+	"net/smtp"
 	"os"
 
-	"github.com/gomodule/redigo/redis"
 	"github.com/joho/godotenv"
 )
 
-//Project struct
-type Project struct {
-	Language    string
-	Description string
+type smtpServer struct {
+	host string
+	port string
 }
 
-//RmProject struct
-type RmProject struct {
-	Language    string
-	Description string
-	Password    string
+//Sender struct
+type Sender struct {
+	User     string
+	Password string
+}
+
+// Address URI to smtp server
+func (s *smtpServer) Address() string {
+	return s.host + ":" + s.port
+}
+
+// Info struct
+type Info struct {
+	Name    string
+	Email   string
+	Message string
+}
+
+// BotsFFL struct
+type BotsFFL struct {
+	Name  string
+	Email string
+	State string
+}
+
+// Birthday struct
+type Birthday struct {
+	Name  string
+	Email string
 }
 
 func goDotEnvVariable(key string) string {
@@ -32,189 +54,96 @@ func goDotEnvVariable(key string) string {
 	return os.Getenv(key)
 }
 
-// SetString function
-func SetString(proj Project) {
-	secret := goDotEnvVariable("REDIS")
-
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
-	if err != nil {
-		log.Fatal(err)
+// SendEmail function
+func SendEmail(info Info) bool {
+	// Sender data.
+	from := goDotEnvVariable("EMAIL")
+	password := goDotEnvVariable("EMAIL-PASS")
+	// Receiver Email address.
+	to := []string{
+		from,
 	}
-	response, err := client.Do("AUTH", secret)
+	// smtp server configuration.
+	smtpServer := smtpServer{host: "smtp.gmail.com", port: "587"}
+	// Message.
+	strMessage := fmt.Sprintf("Name: %s  Email: %s Message: %s", info.Name, info.Email, info.Message)
+	msg := "From: " + from + "\n" + "Subject: webapp\n\n" + strMessage
+	// fmt.Println(strMessage)
+	message := []byte(msg)
+	// Authentication.
+	auth := smtp.PlainAuth("", from, password, smtpServer.host)
+	// Sending Email.
+	err := smtp.SendMail(smtpServer.Address(), auth, from, to, message)
 	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Connected!", response)
-
-	projEn, _ := json.Marshal(proj)
-	// fmt.Println(proj)
-	client.Do("SADD", "projects", projEn)
-	fmt.Println("Added to database")
-}
-
-//RmString func
-func RmString(proj RmProject) bool {
-	secret := goDotEnvVariable("REDIS")
-	pass := goDotEnvVariable("PASSWORD-TEST")
-
-	if pass != proj.Password {
-		fmt.Println("Incorrect Password")
+		fmt.Println(err)
 		return false
 	}
-
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
-	if err != nil {
-		log.Fatal(err)
-	}
-	response, err := client.Do("AUTH", secret)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Connected!", response)
-
-	proj2 := Project{
-		Language:    proj.Language,
-		Description: proj.Description,
-	}
-	fmt.Println(proj2)
-
-	projEn, _ := json.Marshal(proj2)
-	client.Do("SREM", "projects", projEn)
-	fmt.Println("Removed from database")
+	fmt.Println("Email Sent!")
 	return true
 }
 
-//GetProjects function
-func GetProjects() {
-	secret := goDotEnvVariable("REDIS")
-
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+// SaveBotsInfo function
+func SaveBotsInfo(info BotsFFL) bool {
+	// Sender data.
+	from := goDotEnvVariable("EMAIL")
+	password := goDotEnvVariable("EMAIL-PASS")
+	// Receiver Email address.
+	to := []string{
+		from,
+	}
+	// smtp server configuration.
+	smtpServer := smtpServer{host: "smtp.gmail.com", port: "587"}
+	// Message.
+	strMessage := fmt.Sprintf("Name: %s  Email: %s State: %s", info.Name, info.Email, info.State)
+	msg := "From: " + from + "\n" + "Subject: BotsFFL\n\n" + strMessage
+	// fmt.Println(strMessage)
+	message := []byte(msg)
+	// Authentication.
+	auth := smtp.PlainAuth("", from, password, smtpServer.host)
+	// Sending Email.
+	err := smtp.SendMail(smtpServer.Address(), auth, from, to, message)
 	if err != nil {
-		log.Fatal(err)
-	}
-	response, err := client.Do("AUTH", secret)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Connected!", response)
-
-	client.Do("DEL", "projects")
-
-	var unencoded *Project
-
-	project1, _ := redis.Strings(client.Do("SMEMBERS", "projects"))
-	fmt.Println(project1)
-
-	len, _ := redis.Int(client.Do("SCARD", "projects"))
-	fmt.Println(len)
-
-	i := 0
-	if len > 0 {
-		for i < len {
-			json.Unmarshal([]byte(project1[i]), &unencoded)
-			fmt.Println(unencoded.Language)
-			fmt.Println(unencoded.Description)
-			i++
-		}
-	}
-}
-
-func exists(proj RmProject) bool {
-	secret := goDotEnvVariable("REDIS")
-	pass := goDotEnvVariable("PASSWORD-TEST")
-
-	if pass != proj.Password {
-		fmt.Println("Incorrect Password")
+		fmt.Println(err)
 		return false
 	}
-
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
-	if err != nil {
-		log.Fatal(err)
-	}
-	response, err := client.Do("AUTH", secret)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Connected!", response)
-
-	proj2 := Project{
-		Language:    proj.Language,
-		Description: proj.Description,
-	}
-	fmt.Println(proj2)
-
-	projEn, _ := json.Marshal(proj2)
-
-	exist, _ := redis.Bool(client.Do("SISMEMBER", "projects", projEn))
-
-	fmt.Println(exist)
+	fmt.Println("Email Sent!")
 	return true
-
 }
 
-func setMyScore(user string) {
-	secret := goDotEnvVariable("REDIS")
-
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
-	if err != nil {
-		log.Fatal(err)
+// SendBdayEmail function
+func SendBdayEmail(info Birthday) bool {
+	// Sender data.
+	from := goDotEnvVariable("EMAIL")
+	password := goDotEnvVariable("EMAIL-PASS")
+	// Receiver Email address.
+	to := []string{
+		from, info.Email,
 	}
-	response, err := client.Do("AUTH", secret)
+	// smtp server configuration.
+	smtpServer := smtpServer{host: "smtp.gmail.com", port: "587"}
+	// Message.
+	strMessage := fmt.Sprintf("Happy birthday %s! Enjoy your day!\n\n\n\nBest,\nAustin's Automation", info.Name)
+	msg := "From: " + from + "\n" +
+		"To: " + info.Email + "\n" +
+		"Subject: Happy Birthday\n\n" + strMessage
+	// fmt.Println(strMessage)
+	message := []byte(msg)
+	// Authentication.
+	auth := smtp.PlainAuth("", from, password, smtpServer.host)
+	// Sending Email.
+	err := smtp.SendMail(smtpServer.Address(), auth, from, to, message)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return false
 	}
-	fmt.Println("Connected!", response)
-
-	client.Do("HSET", user, "wins", "400")
-	client.Do("HSET", user, "losses", "30")
-}
-
-func testPoints() {
-	secret := goDotEnvVariable("REDIS")
-
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
-	if err != nil {
-		log.Fatal(err)
-	}
-	response, err := client.Do("AUTH", secret)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Connected!", response)
-
-	points, _ := redis.String(client.Do("GET", "mw_points_1"))
-	fmt.Println(points)
+	fmt.Println("Email Sent!")
+	return true
 }
 
 func main() {
-	// 	var proj Project
-	// 	proj.Language = "PYTHON"
-	// 	proj.Description = "Something test"
-	// fullStr = proj.Language + ""
-
-	// SetString(proj)
-	// GetProjects()
-	// proj := RmProject{
-	// 	Language:    "PYTHON",
-	// 	Description: "Machine learning",
-	// 	Password:    "Secure97",
-	// }
-	// fmt.Println(exists(proj))
-	// proj2 := Project{
-	// 	Language:    "PYTHON",
-	// 	Description: "Testing This Out",
-	// }
-	// RmString(proj)
-	// SetString(proj2)
-	// GetProjects()
-	// var info email.Info
-
-	// info.Name = "Austin"
-	// info.Email = "abspencer2097@gmail.com"
-	// info.Message = "Hello World"
-	// email.SendEmail(info)
-	// setMyScore("abspencer2097@gmail.com")
-	// fmt.Println(botsffl.SetLeaders())
-	testPoints()
+	bday := Birthday{
+		"Austin",
+		"abspencer2097@yahoo.com",
+	}
+	SendBdayEmail(bday)
 }

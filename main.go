@@ -194,6 +194,24 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Austin's API, nothing to see here!")
 }
 
+func postBdayEmail(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var info email.Birthday
+	_ = json.Unmarshal(body, &info)
+
+	if email.SendBdayEmail(info) {
+		fmt.Fprintf(w, "Email sent successfully")
+		return
+	}
+
+	fmt.Fprintf(w, "Email not sent")
+}
+
 func handleRequests() {
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"https://abspen1.github.io", "https://austinspencer.works"},
@@ -214,6 +232,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/tendie-intern", getTwitterData).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl", getBotsFFL).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl", postBotsFFL).Methods("POST")
+	myRouter.HandleFunc("/austinapi/bdayemail", postBdayEmail).Methods("POST")
 	handler := c.Handler(myRouter)
 	log.Fatal(http.ListenAndServe(":8558", handler))
 }
