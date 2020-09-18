@@ -1,5 +1,5 @@
 # Go RESTful API
-Building a RESTful API using Go programming language. I love the combination of Go and Redis as my backend for my website. I think Go is an awesome programming language and combined with the ease and speed of Redis is hard to beat. I would love to implement something more complex in the backend that would allow me to use Go Routines and channeling to get the most out of Go's speed and possibilities. This program is used in my [website](https://abspen1.github.io) as the backend for a few different pages. [Webapp repo](https://github.com/abspen1/abspen1.github.io)!
+Building a RESTful API using Go programming language. I love the combination of Go and Redis as my backend for my website. I think Go is an awesome programming language and combined with the ease and speed of Redis is hard to beat. I would love to implement something more complex in the backend that would allow me to use Go Routines and channeling to get the most out of Go's speed and possibilities. This program is used in my [website](https://abspen1.github.io) as the backend for a few different pages. Also check out my websites [repository](https://github.com/abspen1/abspen1.github.io)!
 
 ## 📁 projects
 * Package I use to connect to redis for 'Next Project' page in my website
@@ -28,6 +28,7 @@ webapp
 Name: Joe  Email: example@host.com
 Message: This is an example.
 ```
+# Now also sending birthday messages from Python script api request
 
 ## 📁 test
 * Messy code that I use to test specific functions, mostly with Redis and JSON
@@ -48,7 +49,7 @@ Message: This is an example.
 * Put in your request URL (localhost:8080/projects)
 * Either choose POST or GET request and check the body of the output
 
-## Built to run with Docker
+## Built to as Docker container
 ### Docker Commands
 * cd into the working directory
 
@@ -58,6 +59,7 @@ docker build -t imageName
 docker run -d \
 --name containerName \
 --restart unless-stopped \
+# Expose the port
 -p 8080:8080 \
 imageName
 ```
