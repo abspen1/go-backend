@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/abspen1/restful-go/todos"
+
 	"github.com/abspen1/restful-go/botsffl"
 
 	"github.com/abspen1/restful-go/twitter"
@@ -217,6 +219,28 @@ func postBdayEmail(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Email not sent")
 }
 
+func getTodos(w http.ResponseWriter, r *http.Request) {
+	todos := todos.GetTodos()
+
+	json.NewEncoder(w).Encode(todos)
+}
+
+func postTodos(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var info todos.Todos
+	_ = json.Unmarshal(body, &info)
+	if todos.AddTodo(info) {
+		fmt.Fprintf(w, "Added todo successfully")
+	}
+
+	fmt.Fprintf(w, "Todo not added due to an error")
+}
+
 func handleRequests() {
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"https://abspen1.github.io", "https://austinspencer.works"},
@@ -238,6 +262,8 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/botsffl", getBotsFFL).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl", postBotsFFL).Methods("POST")
 	myRouter.HandleFunc("/austinapi/bdayemail", postBdayEmail).Methods("POST")
+	myRouter.HandleFunc("/austinapi/todos", getTodos).Methods("GET")
+	myRouter.HandleFunc("/austinapi/todos", postTodos).Methods("POST")
 	handler := c.Handler(myRouter)
 	log.Fatal(http.ListenAndServe(":8558", handler))
 }
