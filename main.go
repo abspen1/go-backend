@@ -203,9 +203,14 @@ func postBdayEmail(w http.ResponseWriter, r *http.Request) {
 	}
 	var info email.Birthday
 	_ = json.Unmarshal(body, &info)
-
-	if email.SendBdayEmail(info) {
+	resp := email.SendBdayEmail(info)
+	if resp == "Success" {
 		fmt.Fprintf(w, "Email sent successfully")
+		return
+	}
+
+	if resp == "Auth Err" {
+		fmt.Fprintf(w, "Invalid Authentification")
 		return
 	}
 

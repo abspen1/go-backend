@@ -39,6 +39,7 @@ type Birthday struct {
 	Email         string
 	JokeSetup     string
 	JokePunchLine string
+	Auth          string
 }
 
 func goDotEnvVariable(key string) string {
@@ -107,10 +108,14 @@ func SaveBotsInfo(info BotsFFL) bool {
 }
 
 // SendBdayEmail function
-func SendBdayEmail(info Birthday) bool {
+func SendBdayEmail(info Birthday) string {
 	// Sender data.
 	from := goDotEnvVariable("EMAIL")
 	password := goDotEnvVariable("EMAIL-PASS")
+	pass := goDotEnvVariable("BACK-END-AUTH")
+	if info.Auth != pass {
+		return "Auth Err"
+	}
 	// Receiver Email address.
 	to := []string{
 		from, info.Email,
@@ -130,8 +135,8 @@ func SendBdayEmail(info Birthday) bool {
 	err := smtp.SendMail(smtpServer.Address(), auth, from, to, message)
 	if err != nil {
 		fmt.Println(err)
-		return false
+		return "Email Err"
 	}
 	fmt.Println("Email Sent!")
-	return true
+	return "Success"
 }
