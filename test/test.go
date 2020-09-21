@@ -6,6 +6,7 @@ import (
 	"net/smtp"
 	"os"
 
+	"github.com/gomodule/redigo/redis"
 	"github.com/joho/godotenv"
 )
 
@@ -140,10 +141,24 @@ func SendBdayEmail(info Birthday) bool {
 	return true
 }
 
-func main() {
-	bday := Birthday{
-		"Austin",
-		"abspencer2097@yahoo.com",
+// GetTwitterData function
+func GetTwitterData() {
+	secret := goDotEnvVariable("REDIS")
+
+	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	if err != nil {
+		log.Fatal(err)
 	}
-	SendBdayEmail(bday)
+	_, err = client.Do("AUTH", secret)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer client.Close()
+	// client.Do("HDEL", "Todos", "try to add something")
+	hash, _ := redis.StringMap(client.Do("HGETALL", "Todos"))
+	fmt.Println(hash)
+}
+
+func main() {
+	GetTwitterData()
 }
