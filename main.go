@@ -247,7 +247,7 @@ func rmTodos(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 		body, _ = ioutil.ReadAll(r.Body)
 	}
-	var info todos.Todos
+	var info todos.FullTodo
 	_ = json.Unmarshal(body, &info)
 	if todos.RmTodo(info) {
 		fmt.Fprintf(w, "Removed todo successfully")
