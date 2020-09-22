@@ -1,6 +1,7 @@
 package todos
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -13,14 +14,19 @@ import (
 type Todos struct {
 	/*
 			{
-		    "UserId": 1,
-		    "Id": 1,
-		    "Title": "selected either the"
-		    "Completed" false
+		    "Title": "Example",
+		    "Completed": "false"
 		    }
 	*/
 	Title     string
-	Completed string
+	Completed bool
+}
+
+// FullTodo struct
+type FullTodo struct {
+	Title     string
+	Completed bool
+	Id        string
 }
 
 func goDotEnvVariable(key string) string {
@@ -33,7 +39,7 @@ func goDotEnvVariable(key string) string {
 }
 
 // GetTodos function pulls todo hash from redis database
-func GetTodos() []Todos {
+func GetTodos() []FullTodo {
 	secret := goDotEnvVariable("REDIS")
 
 	client, err := redis.Dial("tcp", "10.10.10.1:6379")
@@ -45,18 +51,37 @@ func GetTodos() []Todos {
 		log.Fatal(err)
 	}
 	defer client.Close()
+
+	var unencoded *FullTodo
+
 	// var todoSlice []Todos
-	strMap, _ := redis.StringMap(client.Do("HGETALL", "Todos"))
-
-	var todos Todos
-	var todoSlice []Todos
-
-	for key, item := range strMap {
-		todos.Title = key
-		todos.Completed = item
-		todoSlice = append(todoSlice, todos)
+	todoSlice, err := redis.Strings(client.Do("SMEMBERS", "Todos"))
+	if err != nil {
+		fmt.Println(err)
 	}
-	return todoSlice
+
+	// fmt.Println(todoSlice)
+
+	len, err := redis.Int(client.Do("SCARD", "Todos"))
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	i := 0
+
+	var fullTodo FullTodo
+	var todoSliceUnencoded []FullTodo
+
+	for i < len {
+		json.Unmarshal([]byte(todoSlice[i]), &unencoded)
+		fullTodo.Title = unencoded.Title
+		fullTodo.Completed = unencoded.Completed
+		fullTodo.Id = unencoded.Id
+		todoSliceUnencoded = append(todoSliceUnencoded, fullTodo)
+		i++
+	}
+
+	return todoSliceUnencoded
 }
 
 // AddTodo function
@@ -75,10 +100,57 @@ func AddTodo(todos Todos) bool {
 	}
 	defer client.Close()
 	// var todoSlice []Todos
-	title := todos.Title
-	completed := todos.Completed
+	client.Do("INCR", "todo-id")
 
-	client.Do("HSET", "Todos", title, completed)
+	var fullTodo FullTodo
+
+	fullTodo.Title = todos.Title
+	fullTodo.Completed = todos.Completed
+	id, err := redis.String(client.Do("GET", "todo-id"))
+	fullTodo.Id = id
+	if err != nil {
+		return false
+	}
+
+	todoEn, err := json.Marshal(fullTodo)
+	if err != nil {
+		return false
+	}
+
+	client.Do("SADD", "Todos", todoEn)
+
+	return true
+}
+
+// RmTodo function
+func RmTodo(fullTodo FullTodo) bool {
+	secret := goDotEnvVariable("REDIS")
+
+	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	if err != nil {
+		fmt.Println("Couldn't connect to Redis")
+		return false
+	}
+	_, err = client.Do("AUTH", secret)
+	if err != nil {
+		fmt.Println("Invalid Redis authentification")
+		return false
+	}
+	defer client.Close()
+
+	todo := FullTodo{
+		Title:     fullTodo.Title,
+		Completed: fullTodo.Completed,
+		Id:        fullTodo.Id,
+	}
+
+	todoEn, err := json.Marshal(todo)
+	if err != nil {
+		fmt.Println("Marshal error")
+		return false
+	}
+	client.Do("SREM", "Todos", todoEn)
+	client.Do("SADD", "Todos-stashed", todoEn)
 
 	return true
 }

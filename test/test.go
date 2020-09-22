@@ -6,6 +6,8 @@ import (
 	"net/smtp"
 	"os"
 
+	"github.com/abspen1/restful-go/todos"
+
 	"github.com/gomodule/redigo/redis"
 	"github.com/joho/godotenv"
 )
@@ -141,8 +143,7 @@ func SendBdayEmail(info Birthday) bool {
 	return true
 }
 
-// GetTwitterData function
-func GetTwitterData() {
+func testTodos() {
 	secret := goDotEnvVariable("REDIS")
 
 	client, err := redis.Dial("tcp", "10.10.10.1:6379")
@@ -154,11 +155,22 @@ func GetTwitterData() {
 		log.Fatal(err)
 	}
 	defer client.Close()
-	// client.Do("HDEL", "Todos", "try to add something")
-	hash, _ := redis.StringMap(client.Do("HGETALL", "Todos"))
-	fmt.Println(hash)
+
+	client.Do("DEL", "Todos")
+
+	first := todos.Todos{
+		"Write essay for CSE 301",
+		false,
+	}
+
+	if todos.AddTodo(first) {
+		fmt.Println("It worked")
+	}
+	// todos.RmTodo(first)
+
+	fmt.Println(todos.GetTodos())
 }
 
 func main() {
-	GetTwitterData()
+	testTodos()
 }

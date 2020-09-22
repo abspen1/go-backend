@@ -240,6 +240,21 @@ func postTodos(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, "Todo not added due to an error")
 }
+func rmTodos(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var info todos.Todos
+	_ = json.Unmarshal(body, &info)
+	if todos.RmTodo(info) {
+		fmt.Fprintf(w, "Removed todo successfully")
+	}
+
+	fmt.Fprintf(w, "Todo wasn't removed due to an error")
+}
 
 func handleRequests() {
 	c := cors.New(cors.Options{
@@ -264,6 +279,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/bdayemail", postBdayEmail).Methods("POST")
 	myRouter.HandleFunc("/austinapi/todos", getTodos).Methods("GET")
 	myRouter.HandleFunc("/austinapi/todos", postTodos).Methods("POST")
+	myRouter.HandleFunc("/austinapi/todos/rm", rmTodos).Methods("POST")
 	handler := c.Handler(myRouter)
 	log.Fatal(http.ListenAndServe(":8558", handler))
 }
