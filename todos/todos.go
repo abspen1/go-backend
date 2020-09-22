@@ -26,7 +26,7 @@ type Todos struct {
 type FullTodo struct {
 	Title     string
 	Completed bool
-	Id        string
+	Id        int
 }
 
 func goDotEnvVariable(key string) string {
@@ -106,7 +106,7 @@ func AddTodo(todos Todos) bool {
 
 	fullTodo.Title = todos.Title
 	fullTodo.Completed = todos.Completed
-	id, err := redis.String(client.Do("GET", "todo-id"))
+	id, err := redis.Int(client.Do("GET", "todo-id"))
 	fullTodo.Id = id
 	if err != nil {
 		return false
