@@ -1,4 +1,4 @@
-# Go RESTful API
+# Go RESTful API [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fabspen1%2Fgo-backend&count_bg=%2329BEB0&title_bg=%23555555&icon=go.svg&icon_color=%2329BEB0&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 Building a RESTful API using Go programming language. I love the combination of Go and Redis as my backend for my website. I think Go is an awesome programming language and combined with the ease and speed of Redis is hard to beat. I would love to implement something more complex in the backend that would allow me to use Go Routines and channeling to get the most out of Go's speed and possibilities. This program is used in my [website](https://abspen1.github.io) as the backend for a few different pages. Also check out my websites [repository](https://github.com/abspen1/abspen1.github.io)!
 
 ## 📁 projects
