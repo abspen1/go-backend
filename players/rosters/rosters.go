@@ -116,84 +116,110 @@ func GetMidwestTeamRosters() Team {
 			case 1:
 				Rosters.Player1 = key
 				Rosters.Position1 = value
+				break
 			case 2:
 				Rosters.Player2 = key
 				Rosters.Position2 = value
+				break
 			case 3:
 				Rosters.Player3 = key
 				Rosters.Position3 = value
+				break
 			case 4:
 				Rosters.Player4 = key
 				Rosters.Position4 = value
+				break
 			case 5:
 				Rosters.Player5 = key
 				Rosters.Position5 = value
+				break
 			case 6:
 				Rosters.Player6 = key
 				Rosters.Position6 = value
+				break
 			case 7:
 				Rosters.Player7 = key
 				Rosters.Position7 = value
+				break
 			case 8:
 				Rosters.Player8 = key
 				Rosters.Position8 = value
+				break
 			case 9:
 				Rosters.Player9 = key
 				Rosters.Position9 = value
+				break
 			case 10:
 				Rosters.Player10 = key
 				Rosters.Position10 = value
+				break
 			case 11:
 				Rosters.Player11 = key
 				Rosters.Position11 = value
+				break
 			case 12:
 				Rosters.Player12 = key
 				Rosters.Position12 = value
+				break
 			case 13:
 				Rosters.Player13 = key
 				Rosters.Position13 = value
+				break
 			case 14:
 				Rosters.Player14 = key
 				Rosters.Position14 = value
+				break
 			case 15:
 				Rosters.Player15 = key
 				Rosters.Position15 = value
+				break
 			case 16:
 				Rosters.Player16 = key
 				Rosters.Position16 = value
+				break
 			case 17:
 				Rosters.Player17 = key
 				Rosters.Position17 = value
+				break
 			case 18:
 				Rosters.Player18 = key
 				Rosters.Position18 = value
+				break
 			case 19:
 				Rosters.Player19 = key
 				Rosters.Position19 = value
+				break
 			case 20:
 				Rosters.Player20 = key
 				Rosters.Position20 = value
+				break
 			case 21:
 				Rosters.Player21 = key
 				Rosters.Position21 = value
+				break
 			case 22:
 				Rosters.Player22 = key
 				Rosters.Position22 = value
+				break
 			case 23:
 				Rosters.Player23 = key
 				Rosters.Position23 = value
+				break
 			case 24:
 				Rosters.Player24 = key
 				Rosters.Position24 = value
+				break
 			case 25:
 				Rosters.Player25 = key
 				Rosters.Position25 = value
+				break
 			case 26:
 				Rosters.Player26 = key
 				Rosters.Position26 = value
+				break
 			}
-			RosterList = append(RosterList, Rosters)
 		}
+		RosterList = append(RosterList, Rosters)
 		Teams.setTeamNames(client, i, RosterList)
 	}
 	return Teams
@@ -225,84 +251,110 @@ func GetNortheastTeamRosters() Team {
 			case 1:
 				Rosters.Player1 = key
 				Rosters.Position1 = value
+				break
 			case 2:
 				Rosters.Player2 = key
 				Rosters.Position2 = value
+				break
 			case 3:
 				Rosters.Player3 = key
 				Rosters.Position3 = value
+				break
 			case 4:
 				Rosters.Player4 = key
 				Rosters.Position4 = value
+				break
 			case 5:
 				Rosters.Player5 = key
 				Rosters.Position5 = value
+				break
 			case 6:
 				Rosters.Player6 = key
 				Rosters.Position6 = value
+				break
 			case 7:
 				Rosters.Player7 = key
 				Rosters.Position7 = value
+				break
 			case 8:
 				Rosters.Player8 = key
 				Rosters.Position8 = value
+				break
 			case 9:
 				Rosters.Player9 = key
 				Rosters.Position9 = value
+				break
 			case 10:
 				Rosters.Player10 = key
 				Rosters.Position10 = value
+				break
 			case 11:
 				Rosters.Player11 = key
 				Rosters.Position11 = value
+				break
 			case 12:
 				Rosters.Player12 = key
 				Rosters.Position12 = value
+				break
 			case 13:
 				Rosters.Player13 = key
 				Rosters.Position13 = value
+				break
 			case 14:
 				Rosters.Player14 = key
 				Rosters.Position14 = value
+				break
 			case 15:
 				Rosters.Player15 = key
 				Rosters.Position15 = value
+				break
 			case 16:
 				Rosters.Player16 = key
 				Rosters.Position16 = value
+				break
 			case 17:
 				Rosters.Player17 = key
 				Rosters.Position17 = value
+				break
 			case 18:
 				Rosters.Player18 = key
 				Rosters.Position18 = value
+				break
 			case 19:
 				Rosters.Player19 = key
 				Rosters.Position19 = value
+				break
 			case 20:
 				Rosters.Player20 = key
 				Rosters.Position20 = value
+				break
 			case 21:
 				Rosters.Player21 = key
 				Rosters.Position21 = value
+				break
 			case 22:
 				Rosters.Player22 = key
 				Rosters.Position22 = value
+				break
 			case 23:
 				Rosters.Player23 = key
 				Rosters.Position23 = value
+				break
 			case 24:
 				Rosters.Player24 = key
 				Rosters.Position24 = value
+				break
 			case 25:
 				Rosters.Player25 = key
 				Rosters.Position25 = value
+				break
 			case 26:
 				Rosters.Player26 = key
 				Rosters.Position26 = value
+				break
 			}
-			RosterList = append(RosterList, Rosters)
 		}
+		RosterList = append(RosterList, Rosters)
 		Teams.setTeamNames(client, i, RosterList)
 	}
 	return Teams
@@ -334,84 +386,110 @@ func GetWestTeamRosters() Team {
 			case 1:
 				Rosters.Player1 = key
 				Rosters.Position1 = value
+				break
 			case 2:
 				Rosters.Player2 = key
 				Rosters.Position2 = value
+				break
 			case 3:
 				Rosters.Player3 = key
 				Rosters.Position3 = value
+				break
 			case 4:
 				Rosters.Player4 = key
 				Rosters.Position4 = value
+				break
 			case 5:
 				Rosters.Player5 = key
 				Rosters.Position5 = value
+				break
 			case 6:
 				Rosters.Player6 = key
 				Rosters.Position6 = value
+				break
 			case 7:
 				Rosters.Player7 = key
 				Rosters.Position7 = value
+				break
 			case 8:
 				Rosters.Player8 = key
 				Rosters.Position8 = value
+				break
 			case 9:
 				Rosters.Player9 = key
 				Rosters.Position9 = value
+				break
 			case 10:
 				Rosters.Player10 = key
 				Rosters.Position10 = value
+				break
 			case 11:
 				Rosters.Player11 = key
 				Rosters.Position11 = value
+				break
 			case 12:
 				Rosters.Player12 = key
 				Rosters.Position12 = value
+				break
 			case 13:
 				Rosters.Player13 = key
 				Rosters.Position13 = value
+				break
 			case 14:
 				Rosters.Player14 = key
 				Rosters.Position14 = value
+				break
 			case 15:
 				Rosters.Player15 = key
 				Rosters.Position15 = value
+				break
 			case 16:
 				Rosters.Player16 = key
 				Rosters.Position16 = value
+				break
 			case 17:
 				Rosters.Player17 = key
 				Rosters.Position17 = value
+				break
 			case 18:
 				Rosters.Player18 = key
 				Rosters.Position18 = value
+				break
 			case 19:
 				Rosters.Player19 = key
 				Rosters.Position19 = value
+				break
 			case 20:
 				Rosters.Player20 = key
 				Rosters.Position20 = value
+				break
 			case 21:
 				Rosters.Player21 = key
 				Rosters.Position21 = value
+				break
 			case 22:
 				Rosters.Player22 = key
 				Rosters.Position22 = value
+				break
 			case 23:
 				Rosters.Player23 = key
 				Rosters.Position23 = value
+				break
 			case 24:
 				Rosters.Player24 = key
 				Rosters.Position24 = value
+				break
 			case 25:
 				Rosters.Player25 = key
 				Rosters.Position25 = value
+				break
 			case 26:
 				Rosters.Player26 = key
 				Rosters.Position26 = value
+				break
 			}
-			RosterList = append(RosterList, Rosters)
 		}
+		RosterList = append(RosterList, Rosters)
 		Teams.setTeamNames(client, i, RosterList)
 	}
 	return Teams
@@ -443,84 +521,110 @@ func GetSoutheastTeamRosters() Team {
 			case 1:
 				Rosters.Player1 = key
 				Rosters.Position1 = value
+				break
 			case 2:
 				Rosters.Player2 = key
 				Rosters.Position2 = value
+				break
 			case 3:
 				Rosters.Player3 = key
 				Rosters.Position3 = value
+				break
 			case 4:
 				Rosters.Player4 = key
 				Rosters.Position4 = value
+				break
 			case 5:
 				Rosters.Player5 = key
 				Rosters.Position5 = value
+				break
 			case 6:
 				Rosters.Player6 = key
 				Rosters.Position6 = value
+				break
 			case 7:
 				Rosters.Player7 = key
 				Rosters.Position7 = value
+				break
 			case 8:
 				Rosters.Player8 = key
 				Rosters.Position8 = value
+				break
 			case 9:
 				Rosters.Player9 = key
 				Rosters.Position9 = value
+				break
 			case 10:
 				Rosters.Player10 = key
 				Rosters.Position10 = value
+				break
 			case 11:
 				Rosters.Player11 = key
 				Rosters.Position11 = value
+				break
 			case 12:
 				Rosters.Player12 = key
 				Rosters.Position12 = value
+				break
 			case 13:
 				Rosters.Player13 = key
 				Rosters.Position13 = value
+				break
 			case 14:
 				Rosters.Player14 = key
 				Rosters.Position14 = value
+				break
 			case 15:
 				Rosters.Player15 = key
 				Rosters.Position15 = value
+				break
 			case 16:
 				Rosters.Player16 = key
 				Rosters.Position16 = value
+				break
 			case 17:
 				Rosters.Player17 = key
 				Rosters.Position17 = value
+				break
 			case 18:
 				Rosters.Player18 = key
 				Rosters.Position18 = value
+				break
 			case 19:
 				Rosters.Player19 = key
 				Rosters.Position19 = value
+				break
 			case 20:
 				Rosters.Player20 = key
 				Rosters.Position20 = value
+				break
 			case 21:
 				Rosters.Player21 = key
 				Rosters.Position21 = value
+				break
 			case 22:
 				Rosters.Player22 = key
 				Rosters.Position22 = value
+				break
 			case 23:
 				Rosters.Player23 = key
 				Rosters.Position23 = value
+				break
 			case 24:
 				Rosters.Player24 = key
 				Rosters.Position24 = value
+				break
 			case 25:
 				Rosters.Player25 = key
 				Rosters.Position25 = value
+				break
 			case 26:
 				Rosters.Player26 = key
 				Rosters.Position26 = value
+				break
 			}
-			RosterList = append(RosterList, Rosters)
 		}
+		RosterList = append(RosterList, Rosters)
 		Teams.setTeamNames(client, i, RosterList)
 	}
 	return Teams
