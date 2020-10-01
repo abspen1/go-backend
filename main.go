@@ -7,6 +7,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/abspen1/restful-go/players/rosters"
+
+	"github.com/abspen1/restful-go/players"
 	"github.com/abspen1/restful-go/todos"
 
 	"github.com/abspen1/restful-go/botsffl"
@@ -159,6 +162,55 @@ func getBotsFFL(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(leaders)
 }
+
+func getMwTeams(w http.ResponseWriter, r *http.Request) {
+	var roster players.Roster
+	roster = players.GetMidwestTeamNames()
+	json.NewEncoder(w).Encode(roster)
+}
+
+func getWTeams(w http.ResponseWriter, r *http.Request) {
+	var roster players.Roster
+	roster = players.GetWestTeamNames()
+	json.NewEncoder(w).Encode(roster)
+}
+
+func getNeTeams(w http.ResponseWriter, r *http.Request) {
+	var roster players.Roster
+	roster = players.GetNortheastTeamNames()
+	json.NewEncoder(w).Encode(roster)
+}
+
+func getSeTeams(w http.ResponseWriter, r *http.Request) {
+	var roster players.Roster
+	roster = players.GetSoutheastTeamNames()
+	json.NewEncoder(w).Encode(roster)
+}
+
+func getMwRosters(w http.ResponseWriter, r *http.Request) {
+	var roster rosters.Team
+	roster = rosters.GetMidwestTeamRosters()
+	json.NewEncoder(w).Encode(roster)
+}
+
+func getNeRosters(w http.ResponseWriter, r *http.Request) {
+	var roster rosters.Team
+	roster = rosters.GetNortheastTeamRosters()
+	json.NewEncoder(w).Encode(roster)
+}
+
+func getWRosters(w http.ResponseWriter, r *http.Request) {
+	var roster rosters.Team
+	roster = rosters.GetWestTeamRosters()
+	json.NewEncoder(w).Encode(roster)
+}
+
+func getSeRosters(w http.ResponseWriter, r *http.Request) {
+	var roster rosters.Team
+	roster = rosters.GetSoutheastTeamRosters()
+	json.NewEncoder(w).Encode(roster)
+}
+
 func postBotsFFL(w http.ResponseWriter, r *http.Request) {
 	var body []byte
 
@@ -280,6 +332,15 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/todos", getTodos).Methods("GET")
 	myRouter.HandleFunc("/austinapi/todos", postTodos).Methods("POST")
 	myRouter.HandleFunc("/austinapi/todos/rm", rmTodos).Methods("POST")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/midwest", getMwTeams).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/west", getWTeams).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/northeast", getNeTeams).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/southeast", getSeTeams).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/midwest/roster", getMwRosters).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/west/roster", getWRosters).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/northeast/roster", getNeRosters).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/southeast/roster", getSeRosters).Methods("GET")
+
 	handler := c.Handler(myRouter)
 	log.Fatal(http.ListenAndServe(":8558", handler))
 }

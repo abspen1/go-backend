@@ -6,6 +6,8 @@ import (
 	"net/smtp"
 	"os"
 
+	"github.com/abspen1/restful-go/players/rosters"
+
 	"github.com/abspen1/restful-go/todos"
 
 	"github.com/gomodule/redigo/redis"
@@ -158,19 +160,28 @@ func testTodos() {
 
 	client.Do("DEL", "Todos")
 
-	first := todos.Todos{
-		"Write essay for CSE 301",
-		false,
-	}
+	// first := todos.Todos{
+	// 	"Write essay for CSE 301",
+	// 	false,
+	// }
 
-	if todos.AddTodo(first) {
-		fmt.Println("It worked")
-	}
+	// if todos.AddTodo(first) {
+	// 	fmt.Println("It worked")
+	// }
 	// todos.RmTodo(first)
 
 	fmt.Println(todos.GetTodos())
 }
 
 func main() {
-	testTodos()
+	// var roster players.Roster
+	// roster = players.GetMidwestTeamNames()
+	// fmt.Println(roster)
+	// roster = players.GetNortheastTeamNames()
+	// fmt.Println(roster)
+	// roster = players.GetSoutheastTeamNames()
+	// fmt.Println(roster)
+	// roster = players.GetWestTeamNames()
+	// fmt.Println(roster)
+	fmt.Println(rosters.GetMidwestTeamRosters())
 }
