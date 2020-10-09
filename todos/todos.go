@@ -4,10 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
+	"github.com/abspen1/restful-go/auth"
 	"github.com/gomodule/redigo/redis"
-	"github.com/joho/godotenv"
 )
 
 // Todos struct
@@ -29,18 +28,9 @@ type FullTodo struct {
 	Id        int
 }
 
-func goDotEnvVariable(key string) string {
-	// load .env file
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-	return os.Getenv(key)
-}
-
 // GetTodos function pulls todo hash from redis database
 func GetTodos() []FullTodo {
-	secret := goDotEnvVariable("REDIS")
+	secret := auth.GoDotEnvVariable("REDIS")
 
 	client, err := redis.Dial("tcp", "10.10.10.1:6379")
 	if err != nil {
@@ -86,7 +76,7 @@ func GetTodos() []FullTodo {
 
 // AddTodo function
 func AddTodo(todos Todos) bool {
-	secret := goDotEnvVariable("REDIS")
+	secret := auth.GoDotEnvVariable("REDIS")
 
 	client, err := redis.Dial("tcp", "10.10.10.1:6379")
 	if err != nil {
@@ -124,7 +114,7 @@ func AddTodo(todos Todos) bool {
 
 // RmTodo function
 func RmTodo(fullTodo FullTodo) bool {
-	secret := goDotEnvVariable("REDIS")
+	secret := auth.GoDotEnvVariable("REDIS")
 
 	client, err := redis.Dial("tcp", "10.10.10.1:6379")
 	if err != nil {

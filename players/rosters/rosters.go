@@ -2,11 +2,11 @@ package rosters
 
 import (
 	"log"
-	"os"
 	"strconv"
 
+	"github.com/abspen1/restful-go/auth"
+
 	"github.com/gomodule/redigo/redis"
-	"github.com/joho/godotenv"
 )
 
 // Team struct
@@ -81,18 +81,9 @@ type Roster struct {
 	Position26 string `json:"position26,omitempty"`
 }
 
-func goDotEnvVariable(key string) string {
-	// load .env file
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-	return os.Getenv(key)
-}
-
 // GetMidwestTeamRosters function
 func GetMidwestTeamRosters() Team {
-	secret := goDotEnvVariable("REDIS")
+	secret := auth.GoDotEnvVariable("REDIS")
 	client, err := redis.Dial("tcp", "10.10.10.1:6379", redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
@@ -227,7 +218,7 @@ func GetMidwestTeamRosters() Team {
 
 // GetNortheastTeamRosters function
 func GetNortheastTeamRosters() Team {
-	secret := goDotEnvVariable("REDIS")
+	secret := auth.GoDotEnvVariable("REDIS")
 	client, err := redis.Dial("tcp", "10.10.10.1:6379", redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
@@ -362,7 +353,7 @@ func GetNortheastTeamRosters() Team {
 
 // GetWestTeamRosters function
 func GetWestTeamRosters() Team {
-	secret := goDotEnvVariable("REDIS")
+	secret := auth.GoDotEnvVariable("REDIS")
 	client, err := redis.Dial("tcp", "10.10.10.1:6379", redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
@@ -497,7 +488,7 @@ func GetWestTeamRosters() Team {
 
 // GetSoutheastTeamRosters function
 func GetSoutheastTeamRosters() Team {
-	secret := goDotEnvVariable("REDIS")
+	secret := auth.GoDotEnvVariable("REDIS")
 	client, err := redis.Dial("tcp", "10.10.10.1:6379", redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)

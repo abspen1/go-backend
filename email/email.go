@@ -2,11 +2,9 @@ package email
 
 import (
 	"fmt"
-	"log"
 	"net/smtp"
-	"os"
 
-	"github.com/joho/godotenv"
+	"github.com/abspen1/restful-go/auth"
 )
 
 type smtpServer struct {
@@ -42,20 +40,11 @@ type Birthday struct {
 	Auth          string
 }
 
-func goDotEnvVariable(key string) string {
-	// load .env file
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-	return os.Getenv(key)
-}
-
 // SendEmail function
 func SendEmail(info Info) bool {
 	// Sender data.
-	from := goDotEnvVariable("EMAIL")
-	password := goDotEnvVariable("EMAIL-PASS")
+	from := auth.GoDotEnvVariable("EMAIL")
+	password := auth.GoDotEnvVariable("EMAIL-PASS")
 	// Receiver Email address.
 	to := []string{
 		from,
@@ -82,8 +71,8 @@ func SendEmail(info Info) bool {
 // SaveBotsInfo function
 func SaveBotsInfo(info BotsFFL) bool {
 	// Sender data.
-	from := goDotEnvVariable("EMAIL")
-	password := goDotEnvVariable("EMAIL-PASS")
+	from := auth.GoDotEnvVariable("EMAIL")
+	password := auth.GoDotEnvVariable("EMAIL-PASS")
 	// Receiver Email address.
 	to := []string{
 		from,
@@ -110,9 +99,9 @@ func SaveBotsInfo(info BotsFFL) bool {
 // SendBdayEmail function
 func SendBdayEmail(info Birthday) string {
 	// Sender data.
-	from := goDotEnvVariable("EMAIL")
-	password := goDotEnvVariable("EMAIL-PASS")
-	pass := goDotEnvVariable("BACK-END-AUTH")
+	from := auth.GoDotEnvVariable("EMAIL")
+	password := auth.GoDotEnvVariable("EMAIL-PASS")
+	pass := auth.GoDotEnvVariable("BACK-END-AUTH")
 	if info.Auth != pass {
 		return "Auth Err"
 	}

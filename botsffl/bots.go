@@ -2,12 +2,11 @@ package botsffl
 
 import (
 	"log"
-	"os"
 
+	"github.com/abspen1/restful-go/auth"
 	"github.com/abspen1/restful-go/email"
 
 	"github.com/gomodule/redigo/redis"
-	"github.com/joho/godotenv"
 )
 
 // Leaders struct
@@ -114,19 +113,10 @@ type Leaders struct {
 	PointsW12    string
 }
 
-func goDotEnvVariable(key string) string {
-	// load .env file
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-	return os.Getenv(key)
-}
-
 // SetLeaders function
 func SetLeaders() Leaders {
 	var status Leaders
-	secret := goDotEnvVariable("REDIS")
+	secret := auth.GoDotEnvVariable("REDIS")
 
 	client, err := redis.Dial("tcp", "10.10.10.1:6379")
 	if err != nil {
@@ -419,7 +409,7 @@ func (status *Leaders) setPointsW(client redis.Conn) {
 
 // SaveProspect function
 func SaveProspect(info email.BotsFFL) {
-	secret := goDotEnvVariable("REDIS")
+	secret := auth.GoDotEnvVariable("REDIS")
 
 	client, err := redis.Dial("tcp", "10.10.10.1:6379")
 	if err != nil {

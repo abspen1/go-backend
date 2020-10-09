@@ -4,10 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
+	"github.com/abspen1/restful-go/auth"
 	"github.com/gomodule/redigo/redis"
-	"github.com/joho/godotenv"
 )
 
 /*
@@ -21,15 +20,6 @@ redis.Strings() – converts an array reply to an slice of strings ([]string)
 redis.ByteSlices() – converts an array reply to an slice of byte slices ([][]byte)
 redis.StringMap() – converts an array of strings (alternating key, value) into a map[string]string. Useful for HGETALL etc
 */
-
-func goDotEnvVariable(key string) string {
-	// load .env file
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-	return os.Getenv(key)
-}
 
 //Project struct
 type Project struct {
@@ -46,7 +36,7 @@ type RmProject struct {
 
 // GetString function
 func GetString() []string {
-	secret := goDotEnvVariable("REDIS")
+	secret := auth.GoDotEnvVariable("REDIS")
 
 	client, err := redis.Dial("tcp", "10.10.10.1:6379")
 	if err != nil {
@@ -80,7 +70,7 @@ func GetString() []string {
 
 // SetString function
 func SetString(proj Project) {
-	secret := goDotEnvVariable("REDIS")
+	secret := auth.GoDotEnvVariable("REDIS")
 
 	client, err := redis.Dial("tcp", "10.10.10.1:6379")
 	if err != nil {
@@ -99,7 +89,7 @@ func SetString(proj Project) {
 
 //RmString func
 func RmString(proj RmProject) bool {
-	secret := goDotEnvVariable("REDIS")
+	secret := auth.GoDotEnvVariable("REDIS")
 
 	client, err := redis.Dial("tcp", "10.10.10.1:6379")
 	if err != nil {
@@ -125,7 +115,7 @@ func RmString(proj RmProject) bool {
 
 // CheckPass function
 func CheckPass(proj RmProject) bool {
-	pass := goDotEnvVariable("PASSWORD")
+	pass := auth.GoDotEnvVariable("PASSWORD")
 
 	if pass != proj.Password {
 		fmt.Println("Incorrect Password")

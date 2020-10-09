@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"log"
 	"net/smtp"
-	"os"
 
-	"github.com/abspen1/restful-go/players/rosters"
+	"github.com/abspen1/restful-go/auth"
+	"github.com/abspen1/restful-go/players/trending"
 
 	"github.com/abspen1/restful-go/todos"
 
 	"github.com/gomodule/redigo/redis"
-	"github.com/joho/godotenv"
 )
 
 type smtpServer struct {
@@ -50,20 +49,11 @@ type Birthday struct {
 	Email string
 }
 
-func goDotEnvVariable(key string) string {
-	// load .env file
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-	return os.Getenv(key)
-}
-
 // SendEmail function
 func SendEmail(info Info) bool {
 	// Sender data.
-	from := goDotEnvVariable("EMAIL")
-	password := goDotEnvVariable("EMAIL-PASS")
+	from := auth.GoDotEnvVariable("EMAIL")
+	password := auth.GoDotEnvVariable("EMAIL-PASS")
 	// Receiver Email address.
 	to := []string{
 		from,
@@ -90,8 +80,8 @@ func SendEmail(info Info) bool {
 // SaveBotsInfo function
 func SaveBotsInfo(info BotsFFL) bool {
 	// Sender data.
-	from := goDotEnvVariable("EMAIL")
-	password := goDotEnvVariable("EMAIL-PASS")
+	from := auth.GoDotEnvVariable("EMAIL")
+	password := auth.GoDotEnvVariable("EMAIL-PASS")
 	// Receiver Email address.
 	to := []string{
 		from,
@@ -118,8 +108,8 @@ func SaveBotsInfo(info BotsFFL) bool {
 // SendBdayEmail function
 func SendBdayEmail(info Birthday) bool {
 	// Sender data.
-	from := goDotEnvVariable("EMAIL")
-	password := goDotEnvVariable("EMAIL-PASS")
+	from := auth.GoDotEnvVariable("EMAIL")
+	password := auth.GoDotEnvVariable("EMAIL-PASS")
 	// Receiver Email address.
 	to := []string{
 		from, info.Email,
@@ -146,7 +136,7 @@ func SendBdayEmail(info Birthday) bool {
 }
 
 func testTodos() {
-	secret := goDotEnvVariable("REDIS")
+	secret := auth.GoDotEnvVariable("REDIS")
 
 	client, err := redis.Dial("tcp", "10.10.10.1:6379")
 	if err != nil {
@@ -183,5 +173,6 @@ func main() {
 	// fmt.Println(roster)
 	// roster = players.GetWestTeamNames()
 	// fmt.Println(roster)
-	fmt.Println(rosters.GetMidwestTeamRosters())
+	fmt.Println(trending.DailyAdd())
+	fmt.Println(trending.WeeklyAdd())
 }
