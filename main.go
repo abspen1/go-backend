@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/abspen1/restful-go/players/trending"
+
 	"github.com/abspen1/restful-go/players/rosters"
 
 	"github.com/abspen1/restful-go/players"
@@ -211,6 +213,30 @@ func getSeRosters(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(roster)
 }
 
+func getDailyTrendAdd(w http.ResponseWriter, r *http.Request) {
+	var daily trending.DayAdd
+	daily = trending.DailyAdd()
+	json.NewEncoder(w).Encode(daily)
+}
+
+func getDailyTrendDrop(w http.ResponseWriter, r *http.Request) {
+	var daily trending.DayDrop
+	daily = trending.DailyDrop()
+	json.NewEncoder(w).Encode(daily)
+}
+
+func getWeeklyTrendAdd(w http.ResponseWriter, r *http.Request) {
+	var weekly trending.WeekAdd
+	weekly = trending.WeeklyAdd()
+	json.NewEncoder(w).Encode(weekly)
+}
+
+func getWeeklyTrendDrop(w http.ResponseWriter, r *http.Request) {
+	var weekly trending.WeekDrop
+	weekly = trending.WeeklyDrop()
+	json.NewEncoder(w).Encode(weekly)
+}
+
 func postBotsFFL(w http.ResponseWriter, r *http.Request) {
 	var body []byte
 
@@ -340,6 +366,10 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/botsffl/teams/west/roster", getWRosters).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl/teams/northeast/roster", getNeRosters).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl/teams/southeast/roster", getSeRosters).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/trending/daily/add", getDailyTrendAdd).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/trending/daily/drop", getDailyTrendDrop).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/trending/weekly/add", getWeeklyTrendAdd).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/trending/weekly/drop", getWeeklyTrendDrop).Methods("GET")
 
 	handler := c.Handler(myRouter)
 	log.Fatal(http.ListenAndServe(":8558", handler))
