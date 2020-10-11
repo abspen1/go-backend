@@ -10,6 +10,12 @@ import (
 	"github.com/dghubble/oauth1"
 )
 
+// Content struct is the content that we expect in the post request
+type Content struct {
+	Message string
+	Auth    string
+}
+
 // Credentials stores all of our access/consumer tokens
 // and secret keys needed for authentication against
 // the twitter REST API.
@@ -52,8 +58,8 @@ func getClient(creds *Credentials) (*twitter.Client, error) {
 }
 
 // Tweet function will tweet out what is going on
-func Tweet(message string) {
-	fmt.Println("Go-Twitter Bot v0.01")
+func Tweet(content Content) bool {
+	// fmt.Println("Go-Twitter Bot v0.01")
 	creds := Credentials{
 		AccessToken:       auth.GoDotEnvVariable("KEY"),
 		AccessTokenSecret: auth.GoDotEnvVariable("SECRET"),
@@ -67,12 +73,15 @@ func Tweet(message string) {
 	if err != nil {
 		log.Println("Error getting Twitter Client")
 		log.Println(err)
+		return false
 	}
 
 	// Print out the pointer to our client
 	// for now so it doesn't throw errors
-	_, _, err = client.Statuses.Update(message, nil)
+	_, _, err = client.Statuses.Update(content.Message, nil)
 	if err != nil {
 		log.Println(err)
+		return false
 	}
+	return true
 }

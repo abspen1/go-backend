@@ -7,6 +7,10 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/abspen1/restful-go/auth"
+
+	"github.com/abspen1/restful-go/twitter/tweet"
+
 	"github.com/abspen1/restful-go/players/trending"
 
 	"github.com/abspen1/restful-go/players/rosters"
@@ -297,6 +301,27 @@ func postBdayEmail(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Email not sent")
 }
 
+func postTweet(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var content tweet.Content
+	_ = json.Unmarshal(body, &content)
+	if content.Auth != auth.GoDotEnvVariable("SECRET") {
+		fmt.Fprintf(w, "Invalid Authentification")
+		return
+	}
+	resp := tweet.Tweet(content)
+	if resp == true {
+		fmt.Fprintf(w, "Tweet sent successfully")
+	} else {
+		fmt.Fprintf(w, "Error in postTweet")
+	}
+}
+
 func getTodos(w http.ResponseWriter, r *http.Request) {
 	todos := todos.GetTodos()
 
@@ -343,6 +368,7 @@ func handleRequests() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 
 	myRouter.HandleFunc("/austinapi/", homePage)
+	myRouter.HandleFunc("/austinapi/go-tweet", postTweet).Methods("POST")
 	myRouter.HandleFunc("/austinapi/projects", getProjects).Methods("GET")
 	myRouter.HandleFunc("/austinapi/projects", postProjects).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rmprojects", postRmprojects).Methods("POST")
