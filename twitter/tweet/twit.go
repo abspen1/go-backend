@@ -76,9 +76,11 @@ func Tweet(content Content) bool {
 		return false
 	}
 
+	message := content.Message + "\n#GoBot"
+
 	// Print out the pointer to our client
 	// for now so it doesn't throw errors
-	_, _, err = client.Statuses.Update(content.Message, nil)
+	_, _, err = client.Statuses.Update(message, nil)
 	if err != nil {
 		log.Println(err)
 		return false
