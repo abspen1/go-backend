@@ -91,7 +91,7 @@ username {
     * This is a much more ellaborate check
     
 
-## Running
+# Running
 
 ## Run main.go
 * cd to your go-backend directory
@@ -100,21 +100,24 @@ username {
 
 ## Test GET/POST requests
 * Using an app of your choosing (I use [Postman](https://www.postman.com/downloads/))
-* Put in your request URL (localhost:8080/projects)
+* Put in your request URL (localhost:8558/projects)
 * Either choose POST or GET request and check the body of the output
 
 ## Built to run as Docker container
 ### Docker Commands
 * cd into the working directory
 
+
 ```bash
+# Build the image
 docker build -t imageName
 
+# Run the image you just built as a container
 docker run -d \
 --name containerName \
 --restart unless-stopped \
 # Expose the port
--p 8080:8080 \
+-p 8558:8558 \
 imageName
 ```
     
