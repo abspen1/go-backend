@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: austinapi
+  namespace: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: austinapi
+  template:
+    metadata:
+      labels:
+        app: austinapi
+    spec:
+      containers:
+      - name: austinapi
+        image: registry:5000/austin-api
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8558
+          protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-service
+  namespace: api
+spec:
+  type: ClusterIP
+  ports:
+    - name: austin-api-port
+      port: 8558
+      protocol: TCP
+      targetPort: 8558
+  selector:
+    app: austinapi
+
+---
+
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: api-ingress
+  namespace: api
+spec:
+  rules:
+    - host: www.guldentech.com
+      http:
+        paths:
+          - path: /austinapi
+            backend:
+              serviceName: api-service
+              servicePort: austin-api-port
+    - host: guldentech.com
+      http:
+        paths:
+          - path: /austinapi
+            backend:
+              serviceName: api-service
+              servicePort: austin-api-port
