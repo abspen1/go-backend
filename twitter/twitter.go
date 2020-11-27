@@ -3,8 +3,8 @@ package twitter
 import (
 	"fmt"
 	"log"
+	"os"
 
-	"github.com/abspen1/restful-go/auth"
 	"github.com/gomodule/redigo/redis"
 )
 
@@ -20,9 +20,10 @@ type Data struct {
 
 // GetTwitterData function
 func GetTwitterData() Data {
-	secret := auth.GoDotEnvVariable("REDIS")
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
 
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	client, err := redis.Dial("tcp", host)
 	if err != nil {
 		log.Fatal(err)
 	}

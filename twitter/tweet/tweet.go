@@ -4,8 +4,8 @@ import (
 	// other imports
 	"fmt"
 	"log"
+	"os"
 
-	"github.com/abspen1/restful-go/auth"
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
 )
@@ -61,10 +61,10 @@ func getClient(creds *Credentials) (*twitter.Client, error) {
 func Tweet(content Content) bool {
 	// fmt.Println("Go-Twitter Bot v0.01")
 	creds := Credentials{
-		AccessToken:       auth.GoDotEnvVariable("KEY"),
-		AccessTokenSecret: auth.GoDotEnvVariable("SECRET"),
-		ConsumerKey:       auth.GoDotEnvVariable("CONSUMER_KEY"),
-		ConsumerSecret:    auth.GoDotEnvVariable("CONSUMER_SECRET"),
+		AccessToken:       os.Getenv("KEY"),
+		AccessTokenSecret: os.Getenv("SECRET"),
+		ConsumerKey:       os.Getenv("CONSUMER_KEY"),
+		ConsumerSecret:    os.Getenv("CONSUMER_SECRET"),
 	}
 
 	fmt.Printf("%+v\n", creds)
