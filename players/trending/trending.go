@@ -2,9 +2,9 @@ package trending
 
 import (
 	"log"
+	"os"
 	"strconv"
 
-	"github.com/abspen1/restful-go/auth"
 	"github.com/gomodule/redigo/redis"
 )
 
@@ -66,8 +66,8 @@ type WeekDrop struct {
 
 //DailyAdd function will return the DayAdd trending players from sleeper API
 func DailyAdd() DayAdd {
-	secret := auth.GoDotEnvVariable("REDICLOUD")
-	host := auth.GoDotEnvVariable("HOST")
+	secret := os.Getenv("REDICLOUD")
+	host := os.Getenv("HOST")
 	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
@@ -119,8 +119,8 @@ func DailyAdd() DayAdd {
 
 //DailyDrop function will return the DayDrop trending players from sleeper API
 func DailyDrop() DayDrop {
-	secret := auth.GoDotEnvVariable("REDICLOUD")
-	host := auth.GoDotEnvVariable("HOST")
+	secret := os.Getenv("REDICLOUD")
+	host := os.Getenv("HOST")
 	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
@@ -172,8 +172,8 @@ func DailyDrop() DayDrop {
 
 // WeeklyAdd function that returns the top trending players past 5 days on sleeper API
 func WeeklyAdd() WeekAdd {
-	secret := auth.GoDotEnvVariable("REDICLOUD")
-	host := auth.GoDotEnvVariable("HOST")
+	secret := os.Getenv("REDICLOUD")
+	host := os.Getenv("HOST")
 	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
@@ -225,8 +225,8 @@ func WeeklyAdd() WeekAdd {
 
 // WeeklyDrop function that returns the top trending players past 5 days on sleeper API
 func WeeklyDrop() WeekDrop {
-	secret := auth.GoDotEnvVariable("REDICLOUD")
-	host := auth.GoDotEnvVariable("HOST")
+	secret := os.Getenv("REDICLOUD")
+	host := os.Getenv("HOST")
 	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)

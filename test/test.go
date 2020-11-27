@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/smtp"
+	"os"
 
-	"github.com/abspen1/restful-go/auth"
 	"github.com/abspen1/restful-go/players/trending"
 
 	"github.com/abspen1/restful-go/todos"
@@ -52,8 +52,8 @@ type Birthday struct {
 // SendEmail function
 func SendEmail(info Info) bool {
 	// Sender data.
-	from := auth.GoDotEnvVariable("EMAIL")
-	password := auth.GoDotEnvVariable("EMAIL-PASS")
+	from := os.Getenv("EMAIL")
+	password := os.Getenv("EMAIL-PASS")
 	// Receiver Email address.
 	to := []string{
 		from,
@@ -80,8 +80,8 @@ func SendEmail(info Info) bool {
 // SaveBotsInfo function
 func SaveBotsInfo(info BotsFFL) bool {
 	// Sender data.
-	from := auth.GoDotEnvVariable("EMAIL")
-	password := auth.GoDotEnvVariable("EMAIL-PASS")
+	from := os.Getenv("EMAIL")
+	password := os.Getenv("EMAIL-PASS")
 	// Receiver Email address.
 	to := []string{
 		from,
@@ -108,8 +108,8 @@ func SaveBotsInfo(info BotsFFL) bool {
 // SendBdayEmail function
 func SendBdayEmail(info Birthday) bool {
 	// Sender data.
-	from := auth.GoDotEnvVariable("EMAIL")
-	password := auth.GoDotEnvVariable("EMAIL-PASS")
+	from := os.Getenv("EMAIL")
+	password := os.Getenv("EMAIL-PASS")
 	// Receiver Email address.
 	to := []string{
 		from, info.Email,
@@ -136,9 +136,10 @@ func SendBdayEmail(info Birthday) bool {
 }
 
 func testTodos() {
-	secret := auth.GoDotEnvVariable("REDIS")
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
 
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	client, err := redis.Dial("tcp", host)
 	if err != nil {
 		log.Fatal(err)
 	}

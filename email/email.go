@@ -3,8 +3,7 @@ package email
 import (
 	"fmt"
 	"net/smtp"
-
-	"github.com/abspen1/restful-go/auth"
+	"os"
 )
 
 type smtpServer struct {
@@ -43,8 +42,8 @@ type Birthday struct {
 // SendEmail function
 func SendEmail(info Info) bool {
 	// Sender data.
-	from := auth.GoDotEnvVariable("EMAIL")
-	password := auth.GoDotEnvVariable("EMAIL-PASS")
+	from := os.Getenv("EMAIL")
+	password := os.Getenv("EMAIL-PASS")
 	// Receiver Email address.
 	to := []string{
 		from,
@@ -71,8 +70,8 @@ func SendEmail(info Info) bool {
 // SaveBotsInfo function
 func SaveBotsInfo(info BotsFFL) bool {
 	// Sender data.
-	from := auth.GoDotEnvVariable("EMAIL")
-	password := auth.GoDotEnvVariable("EMAIL-PASS")
+	from := os.Getenv("EMAIL")
+	password := os.Getenv("EMAIL-PASS")
 	// Receiver Email address.
 	to := []string{
 		from,
@@ -99,9 +98,9 @@ func SaveBotsInfo(info BotsFFL) bool {
 // SendBdayEmail function
 func SendBdayEmail(info Birthday) string {
 	// Sender data.
-	from := auth.GoDotEnvVariable("EMAIL")
-	password := auth.GoDotEnvVariable("EMAIL-PASS")
-	pass := auth.GoDotEnvVariable("BACK-END-AUTH")
+	from := os.Getenv("EMAIL")
+	password := os.Getenv("EMAIL-PASS")
+	pass := os.Getenv("BACK-END-AUTH")
 	if info.Auth != pass {
 		return "Auth Err"
 	}

@@ -2,9 +2,8 @@ package rosters
 
 import (
 	"log"
+	"os"
 	"strconv"
-
-	"github.com/abspen1/restful-go/auth"
 
 	"github.com/gomodule/redigo/redis"
 )
@@ -83,8 +82,10 @@ type Roster struct {
 
 // GetMidwestTeamRosters function
 func GetMidwestTeamRosters() Team {
-	secret := auth.GoDotEnvVariable("REDIS")
-	client, err := redis.Dial("tcp", "10.10.10.1:6379", redis.DialDatabase(10), redis.DialPassword(secret))
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
+
+	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -218,8 +219,9 @@ func GetMidwestTeamRosters() Team {
 
 // GetNortheastTeamRosters function
 func GetNortheastTeamRosters() Team {
-	secret := auth.GoDotEnvVariable("REDIS")
-	client, err := redis.Dial("tcp", "10.10.10.1:6379", redis.DialDatabase(10), redis.DialPassword(secret))
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
+	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -353,8 +355,9 @@ func GetNortheastTeamRosters() Team {
 
 // GetWestTeamRosters function
 func GetWestTeamRosters() Team {
-	secret := auth.GoDotEnvVariable("REDIS")
-	client, err := redis.Dial("tcp", "10.10.10.1:6379", redis.DialDatabase(10), redis.DialPassword(secret))
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
+	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -488,8 +491,10 @@ func GetWestTeamRosters() Team {
 
 // GetSoutheastTeamRosters function
 func GetSoutheastTeamRosters() Team {
-	secret := auth.GoDotEnvVariable("REDIS")
-	client, err := redis.Dial("tcp", "10.10.10.1:6379", redis.DialDatabase(10), redis.DialPassword(secret))
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
+
+	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
 	}

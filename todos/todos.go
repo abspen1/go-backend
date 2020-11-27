@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
-	"github.com/abspen1/restful-go/auth"
 	"github.com/gomodule/redigo/redis"
 )
 
@@ -30,9 +30,10 @@ type FullTodo struct {
 
 // GetTodos function pulls todo hash from redis database
 func GetTodos() []FullTodo {
-	secret := auth.GoDotEnvVariable("REDIS")
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
 
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	client, err := redis.Dial("tcp", host)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -76,9 +77,10 @@ func GetTodos() []FullTodo {
 
 // AddTodo function
 func AddTodo(todos Todos) bool {
-	secret := auth.GoDotEnvVariable("REDIS")
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
 
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	client, err := redis.Dial("tcp", host)
 	if err != nil {
 		fmt.Println("Couldn't connect to Redis")
 		return false
@@ -114,9 +116,10 @@ func AddTodo(todos Todos) bool {
 
 // RmTodo function
 func RmTodo(fullTodo FullTodo) bool {
-	secret := auth.GoDotEnvVariable("REDIS")
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
 
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	client, err := redis.Dial("tcp", host)
 	if err != nil {
 		fmt.Println("Couldn't connect to Redis")
 		return false
