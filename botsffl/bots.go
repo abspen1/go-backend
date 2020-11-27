@@ -117,8 +117,9 @@ type Leaders struct {
 func SetLeaders() Leaders {
 	var status Leaders
 	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
 
-	client, err := redis.Dial("tcp", os.Getenv("REDIS_HOST_PORT"))
+	client, err := redis.Dial("tcp", host)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -410,8 +411,9 @@ func (status *Leaders) setPointsW(client redis.Conn) {
 // SaveProspect function
 func SaveProspect(info email.BotsFFL) {
 	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
 
-	client, err := redis.Dial("tcp", os.Getenv("REDIS_HOST_PORT"))
+	client, err := redis.Dial("tcp", host)
 	if err != nil {
 		log.Fatal(err)
 	}

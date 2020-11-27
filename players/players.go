@@ -27,7 +27,9 @@ type Roster struct {
 // GetMidwestTeamNames function
 func GetMidwestTeamNames() Roster {
 	secret := os.Getenv("REDIS_PASS")
-	client, err := redis.Dial("tcp", os.Getenv("REDIS_HOST_PORT"), redis.DialDatabase(10), redis.DialPassword(secret))
+	host := os.Getenv("REDIS_HOST_PORT")
+
+	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -46,7 +48,9 @@ func GetMidwestTeamNames() Roster {
 // GetWestTeamNames function
 func GetWestTeamNames() Roster {
 	secret := os.Getenv("REDIS_PASS")
-	client, err := redis.Dial("tcp", os.Getenv("REDIS_HOST_PORT"), redis.DialDatabase(10), redis.DialPassword(secret))
+	host := os.Getenv("REDIS_HOST_PORT")
+
+	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,7 +69,9 @@ func GetWestTeamNames() Roster {
 // GetNortheastTeamNames function
 func GetNortheastTeamNames() Roster {
 	secret := os.Getenv("REDIS_PASS")
-	client, err := redis.Dial("tcp", os.Getenv("REDIS_HOST_PORT"), redis.DialDatabase(10), redis.DialPassword(secret))
+	host := os.Getenv("REDIS_HOST_PORT")
+
+	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -84,7 +90,9 @@ func GetNortheastTeamNames() Roster {
 // GetSoutheastTeamNames function
 func GetSoutheastTeamNames() Roster {
 	secret := os.Getenv("REDIS_PASS")
-	client, err := redis.Dial("tcp", os.Getenv("REDIS_HOST_PORT"), redis.DialDatabase(10), redis.DialPassword(secret))
+	host := os.Getenv("REDIS_HOST_PORT")
+
+	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
 	}

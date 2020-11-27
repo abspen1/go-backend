@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
-	"github.com/abspen1/restful-go/auth"
 	"github.com/gomodule/redigo/redis"
 )
 
@@ -36,9 +36,10 @@ type RmProject struct {
 
 // GetString function
 func GetString() []string {
-	secret := auth.GoDotEnvVariable("REDIS")
+	secret := os.Getenv("REDIS")
+	host := os.Getenv("REDIS_HOST_PORT")
 
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	client, err := redis.Dial("tcp", host)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -70,9 +71,10 @@ func GetString() []string {
 
 // SetString function
 func SetString(proj Project) {
-	secret := auth.GoDotEnvVariable("REDIS")
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
 
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	client, err := redis.Dial("tcp", host)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -89,9 +91,10 @@ func SetString(proj Project) {
 
 //RmString func
 func RmString(proj RmProject) bool {
-	secret := auth.GoDotEnvVariable("REDIS")
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
 
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	client, err := redis.Dial("tcp", host)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -115,7 +118,7 @@ func RmString(proj RmProject) bool {
 
 // CheckPass function
 func CheckPass(proj RmProject) bool {
-	pass := auth.GoDotEnvVariable("PASSWORD")
+	pass := os.Getenv("PASSWORD")
 
 	if pass != proj.Password {
 		fmt.Println("Incorrect Password")
