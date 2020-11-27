@@ -2,8 +2,8 @@ package botsffl
 
 import (
 	"log"
+	"os"
 
-	"github.com/abspen1/restful-go/auth"
 	"github.com/abspen1/restful-go/email"
 
 	"github.com/gomodule/redigo/redis"
@@ -116,9 +116,9 @@ type Leaders struct {
 // SetLeaders function
 func SetLeaders() Leaders {
 	var status Leaders
-	secret := auth.GoDotEnvVariable("REDIS")
+	secret := os.Getenv("REDIS_PASS")
 
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	client, err := redis.Dial("tcp", os.Getenv("REDIS_HOST_PORT"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -409,9 +409,9 @@ func (status *Leaders) setPointsW(client redis.Conn) {
 
 // SaveProspect function
 func SaveProspect(info email.BotsFFL) {
-	secret := auth.GoDotEnvVariable("REDIS")
+	secret := os.Getenv("REDIS_PASS")
 
-	client, err := redis.Dial("tcp", "10.10.10.1:6379")
+	client, err := redis.Dial("tcp", os.Getenv("REDIS_HOST_PORT"))
 	if err != nil {
 		log.Fatal(err)
 	}
