@@ -13,6 +13,8 @@ spec:
       labels:
         app: austinapi
     spec:
+      imagePullSecrets:
+      - name: pipeline-docker-registry
       containers:
       - name: austinapi
         image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
