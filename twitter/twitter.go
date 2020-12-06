@@ -33,12 +33,12 @@ func GetTwitterData() Data {
 	}
 	defer client.Close()
 	var data Data
-	data.Followers, _ = redis.Int(client.Do("GET", "tendie_followers"))
-	data.TweetsLiked, _ = redis.Int(client.Do("GET", "tendie_favorites"))
-	data.Tweets, _ = redis.Int(client.Do("GET", "tendie_statuses"))
-	data.TweetsRead, _ = redis.Int(client.Do("GET", "tendie_read"))
-	data.LatestTweet, _ = redis.String(client.Do("GET", "tendie_recent"))
-	data.Accuracy, _ = redis.String(client.Do("GET", "tendie_pct"))
+	data.Followers, _ = redis.Int(client.Do("GET", "followers"))
+	data.TweetsLiked, _ = redis.Int(client.Do("GET", "favorites"))
+	data.Tweets, _ = redis.Int(client.Do("GET", "statuses"))
+	data.TweetsRead, _ = redis.Int(client.Do("GET", "read"))
+	data.LatestTweet, _ = redis.String(client.Do("GET", "recent"))
+	// data.Accuracy, _ = redis.String(client.Do("GET", "pct"))
 	fmt.Println(data)
 	return data
 }
