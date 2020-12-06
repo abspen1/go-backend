@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: austinapi
-        image: registry:5000/austin-api
+        image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
         imagePullPolicy: Always
         ports:
         - containerPort: 8558

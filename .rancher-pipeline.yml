@@ -1,0 +1,21 @@
+stages:
+- name: Build
+  steps:
+  - runScriptConfig:
+      image: golang:1.11
+      shellScript: |-
+        mkdir -p /go/src/github.com/abspen1
+        ln -s `pwd` /go/src/github.com/abspen1/go-backend
+        cd /go/src/github.com/abspen1/go-backend
+        go mod download
+        go build -o bin/main
+- name: Publish
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./Dockerfile
+      buildContext: .
+      tag: example-helloserver:${CICD_EXECUTION_SEQUENCE}
+- name: Deploy
+  steps:
+  - applyYamlConfig:
+      path: ./deployment.yaml
