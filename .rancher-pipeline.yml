@@ -7,6 +7,7 @@ stages:
         mkdir -p /go/src/github.com/abspen1
         ln -s `pwd` /go/src/github.com/abspen1/go-backend
         cd /go/src/github.com/abspen1/go-backend
+        export GO111MODULE="on"
         ls -l
         go mod download
         go build -o bin/main
