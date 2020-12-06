@@ -16,8 +16,8 @@ stages:
   - publishImageConfig:
       dockerfilePath: ./Dockerfile
       buildContext: .
-      tag: example-helloserver:${CICD_EXECUTION_SEQUENCE}
+      tag: austin-api:${CICD_EXECUTION_SEQUENCE}
 - name: Deploy
   steps:
   - applyYamlConfig:
-      path: ./deployment.yaml
+      path: ./austin-api-dc-svc-ingress.yaml
