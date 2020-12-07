@@ -36,7 +36,7 @@ type RmProject struct {
 
 // GetString function
 func GetString() []string {
-	secret := os.Getenv("REDIS")
+	secret := os.Getenv("REDIS_PASS")
 	host := os.Getenv("REDIS_HOST_PORT")
 
 	client, err := redis.Dial("tcp", host)

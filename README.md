@@ -2,7 +2,7 @@
 Building a RESTful API using Go programming language. I love the combination of Go and Redis as my backend for my website. I think Go is an awesome programming language and combined with the ease and speed of Redis is hard to beat. I would love to implement something more complex in the backend that would allow me to use Go Routines and channeling to get the most out of Go's speed and possibilities. This program is used in my [website](https://abspen1.github.io) as the backend for a few different pages. Also check out my websites [repository](https://github.com/abspen1/abspen1.github.io)!
 
 
-## 📁 auth
+## 📁 auth (Deprecated)
 * Package that imports goDotEnv
 * This allows me to not need the goDotEnv function in each project and rather just import the function from my auth project
 
@@ -120,6 +120,15 @@ docker run -d \
 -p 8558:8558 \
 imageName
 ```
+
+## Kubernetes Implementation
+* Added austin-api-dc-svc-ingress.yaml which is for the Kubernetes deployment
+* Integrated from the .env into env variables saved in Kubernetes secrets
+* Something to keep in mind is never use .env files with Docker containers since then anyone running the docker container will have access to those .env variables
+
+### Rancher Pipeline
+* Within Kubernetes, have pipelining set up with this GitHub repository
+    * Each push in the repository will redeploy the project with the changes implemented
     
 ## Docker Help
 * $ docker --help
