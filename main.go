@@ -6,8 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-
-	"github.com/abspen1/restful-go/auth"
+	"os"
 
 	"github.com/abspen1/restful-go/twitter/tweet"
 
@@ -326,7 +325,7 @@ func postTweet(w http.ResponseWriter, r *http.Request) {
 	}
 	var content tweet.Content
 	_ = json.Unmarshal(body, &content)
-	if content.Auth != auth.GoDotEnvVariable("SECRET") {
+	if content.Auth != os.Getenv("SECRET") {
 		fmt.Fprintf(w, "Invalid Authentification")
 		return
 	}
