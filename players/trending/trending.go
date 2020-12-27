@@ -66,9 +66,9 @@ type WeekDrop struct {
 
 //DailyAdd function will return the DayAdd trending players from sleeper API
 func DailyAdd() DayAdd {
-	secret := os.Getenv("REDICLOUD")
-	host := os.Getenv("HOST")
-	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
+	client, err := redis.Dial("tcp", host, redis.DialDatabase(12), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
 	}
