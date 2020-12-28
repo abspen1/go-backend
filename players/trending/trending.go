@@ -1,7 +1,6 @@
 package trending
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -67,7 +66,6 @@ type WeekDrop struct {
 
 //DailyAdd function will return the DayAdd trending players from sleeper API
 func DailyAdd() DayAdd {
-	fmt.Println("Setting the daily added players.")
 	secret := os.Getenv("REDIS_PASS")
 	host := os.Getenv("REDIS_HOST_PORT")
 	client, err := redis.Dial("tcp", host, redis.DialDatabase(12), redis.DialPassword(secret))
@@ -121,9 +119,9 @@ func DailyAdd() DayAdd {
 
 //DailyDrop function will return the DayDrop trending players from sleeper API
 func DailyDrop() DayDrop {
-	secret := os.Getenv("REDICLOUD")
-	host := os.Getenv("HOST")
-	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
+	client, err := redis.Dial("tcp", host, redis.DialDatabase(12), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -174,9 +172,9 @@ func DailyDrop() DayDrop {
 
 // WeeklyAdd function that returns the top trending players past 5 days on sleeper API
 func WeeklyAdd() WeekAdd {
-	secret := os.Getenv("REDICLOUD")
-	host := os.Getenv("HOST")
-	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
+	client, err := redis.Dial("tcp", host, redis.DialDatabase(12), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -227,9 +225,9 @@ func WeeklyAdd() WeekAdd {
 
 // WeeklyDrop function that returns the top trending players past 5 days on sleeper API
 func WeeklyDrop() WeekDrop {
-	secret := os.Getenv("REDICLOUD")
-	host := os.Getenv("HOST")
-	client, err := redis.Dial("tcp", host, redis.DialDatabase(10), redis.DialPassword(secret))
+	secret := os.Getenv("REDIS_PASS")
+	host := os.Getenv("REDIS_HOST_PORT")
+	client, err := redis.Dial("tcp", host, redis.DialDatabase(12), redis.DialPassword(secret))
 	if err != nil {
 		log.Fatal(err)
 	}
