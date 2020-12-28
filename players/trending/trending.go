@@ -1,6 +1,7 @@
 package trending
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -66,6 +67,7 @@ type WeekDrop struct {
 
 //DailyAdd function will return the DayAdd trending players from sleeper API
 func DailyAdd() DayAdd {
+	fmt.Println("Setting the daily added players.")
 	secret := os.Getenv("REDIS_PASS")
 	host := os.Getenv("REDIS_HOST_PORT")
 	client, err := redis.Dial("tcp", host, redis.DialDatabase(12), redis.DialPassword(secret))
