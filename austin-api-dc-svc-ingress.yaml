@@ -63,11 +63,6 @@ spec:
             secretKeyRef:
               key: EMAIL-PASS
               name: go-back-end
-        - name: HOST
-          valueFrom:
-            secretKeyRef:
-              key: HOST
-              name: go-back-end
         - name: KEY
           valueFrom:
             secretKeyRef:
@@ -77,11 +72,6 @@ spec:
           valueFrom:
             secretKeyRef:
               key: PASSWORD-TEST
-              name: go-back-end
-        - name: REDICLOUD
-          valueFrom:
-            secretKeyRef:
-              key: REDICLOUD
               name: go-back-end
         - name: SECRET
           valueFrom:
