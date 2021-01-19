@@ -11,13 +11,32 @@ stages:
         ls -l
         go mod download
         go build -o bin/main
+  when:
+    event:
+      include:
+      - push
+      - pull_request
 - name: Publish
   steps:
   - publishImageConfig:
       dockerfilePath: ./Dockerfile
       buildContext: .
       tag: austin-api:${CICD_EXECUTION_SEQUENCE}
+  when:
+    event:
+      include:
+      - push
+      - pull_request
 - name: Deploy
   steps:
   - applyYamlConfig:
       path: ./austin-api-dc-svc-ingress.yaml
+  when:
+    event:
+      include:
+      - push
+      - pull_request
+branch:
+  include:
+  - master
+notification: {}
