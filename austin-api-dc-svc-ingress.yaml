@@ -78,6 +78,16 @@ spec:
             secretKeyRef:
               key: SECRET
               name: go-back-end
+        - name: ALP-KEY
+              valueFrom:
+                secretKeyRef:
+                  key: ALP-KEY
+                  name: go-back-end
+        - name: ALP-SECRET
+          valueFrom:
+            secretKeyRef:
+              key: ALP-SECRET
+              name: go-back-end
 
 ---
 

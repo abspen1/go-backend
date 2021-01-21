@@ -3,6 +3,7 @@ module github.com/abspen1/restful-go
 go 1.14
 
 require (
+	github.com/alpacahq/alpaca-trade-api-go v1.7.0
 	github.com/badoux/checkmail v1.2.0
 	github.com/dghubble/go-twitter v0.0.0-20200725221434-4bc8ad7ad1b4
 	github.com/dghubble/oauth1 v0.6.0
@@ -11,4 +12,5 @@ require (
 	github.com/gorilla/mux v1.7.4
 	github.com/joho/godotenv v1.3.0
 	github.com/rs/cors v1.7.0
+	github.com/shopspring/decimal v1.2.0
 )

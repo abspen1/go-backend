@@ -14,6 +14,7 @@ import (
 
 	"github.com/abspen1/restful-go/players/rosters"
 
+	"github.com/abspen1/restful-go/alp"
 	"github.com/abspen1/restful-go/players"
 	"github.com/abspen1/restful-go/todos"
 
@@ -316,6 +317,20 @@ func postBdayEmail(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Email not sent")
 }
 
+func getStockPrice(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var stock alp.Ticker
+	_ = json.Unmarshal(body, &stock)
+
+	resp := alp.GetCurrentPrice(stock.Stock)
+	fmt.Fprintf(w, resp)
+}
+
 func postTweet(w http.ResponseWriter, r *http.Request) {
 	var body []byte
 
@@ -414,17 +429,18 @@ func handleRequests() {
 
 	myRouter.HandleFunc("/austinapi/", homePage)
 	myRouter.HandleFunc("/austinapi/go-tweet", postTweet).Methods("POST")
-	myRouter.HandleFunc("/austinapi/go-tweet", getTweet)
+	myRouter.HandleFunc("/austinapi/go-tweet", getTweet).Methods("GET")
 	myRouter.HandleFunc("/austinapi/projects", getProjects).Methods("GET")
 	myRouter.HandleFunc("/austinapi/projects", postProjects).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rmprojects", postRmprojects).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rmprojects", getRmprojects)
 	myRouter.HandleFunc("/austinapi/email", sendEmail).Methods("POST")
-	myRouter.HandleFunc("/austinapi/email", getEmail)
+	myRouter.HandleFunc("/austinapi/email", getEmail).Methods("GET")
 	myRouter.HandleFunc("/austinapi/rps/login", postRPSLogin).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rps", postRPS).Methods("POST")
-	myRouter.HandleFunc("/austinapi/rps/login", getRPSLogin)
-	myRouter.HandleFunc("/austinapi/rps", getRPS)
+	myRouter.HandleFunc("/austinapi/rps/login", getRPSLogin).Methods("GET")
+	myRouter.HandleFunc("/austinapi/rps", getRPS).Methods("GET")
+	myRouter.HandleFunc("/austinapi/current-stock-price", getStockPrice).Methods("GET")
 	myRouter.HandleFunc("/austinapi/tendie-intern", getTwitterData).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl", getBotsFFL).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl", postBotsFFL).Methods("POST")
