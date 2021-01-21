@@ -14,83 +14,82 @@ spec:
         app: austinapi
     spec:
       imagePullSecrets:
-      - name: pipeline-docker-registry
+        - name: pipeline-docker-registry
       containers:
-      - name: austinapi
-        image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8558
-          protocol: TCP
-        env:
-        - name: REDIS_PASS
-          valueFrom:
-            secretKeyRef:
-              key: REDIS_PASS
-              name: redis-pass
-        - name: REDIS_HOST_PORT
-          valueFrom:
-            secretKeyRef:
-              key: REDIS_HOST_PORT
-              name: redis-pass
-        - name: REDIS_HOST
-          valueFrom:
-            secretKeyRef:
-              key: REDIS_HOST
-              name: redis-pass
-        - name: BACK-END-AUTH
-          valueFrom:
-            secretKeyRef:
-              key: BACK-END-AUTH
-              name: go-back-end
-        - name: CONSUMER_KEY
-          valueFrom:
-            secretKeyRef:
-              key: CONSUMER_KEY
-              name: go-back-end
-        - name: CONSUMER_SECRET
-          valueFrom:
-            secretKeyRef:
-              key: CONSUMER_SECRET
-              name: go-back-end
-        - name: EMAIL
-          valueFrom:
-            secretKeyRef:
-              key: EMAIL
-              name: go-back-end
-        - name: EMAIL-PASS
-          valueFrom:
-            secretKeyRef:
-              key: EMAIL-PASS
-              name: go-back-end
-        - name: KEY
-          valueFrom:
-            secretKeyRef:
-              key: KEY
-              name: go-back-end
-        - name: PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: PASSWORD-TEST
-              name: go-back-end
-        - name: SECRET
-          valueFrom:
-            secretKeyRef:
-              key: SECRET
-              name: go-back-end
-        - name: ALP-KEY
+        - name: austinapi
+          image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8558
+              protocol: TCP
+          env:
+            - name: REDIS_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: REDIS_PASS
+                  name: redis-pass
+            - name: REDIS_HOST_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: REDIS_HOST_PORT
+                  name: redis-pass
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: REDIS_HOST
+                  name: redis-pass
+            - name: BACK-END-AUTH
+              valueFrom:
+                secretKeyRef:
+                  key: BACK-END-AUTH
+                  name: go-back-end
+            - name: CONSUMER_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: CONSUMER_KEY
+                  name: go-back-end
+            - name: CONSUMER_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: CONSUMER_SECRET
+                  name: go-back-end
+            - name: EMAIL
+              valueFrom:
+                secretKeyRef:
+                  key: EMAIL
+                  name: go-back-end
+            - name: EMAIL-PASS
+              valueFrom:
+                secretKeyRef:
+                  key: EMAIL-PASS
+                  name: go-back-end
+            - name: KEY
+              valueFrom:
+                secretKeyRef:
+                  key: KEY
+                  name: go-back-end
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PASSWORD-TEST
+                  name: go-back-end
+            - name: SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: SECRET
+                  name: go-back-end
+            - name: ALP-KEY
               valueFrom:
                 secretKeyRef:
                   key: ALP-KEY
                   name: go-back-end
-        - name: ALP-SECRET
-          valueFrom:
-            secretKeyRef:
-              key: ALP-SECRET
-              name: go-back-end
+            - name: ALP-SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: ALP-SECRET
+                  name: go-back-end
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -107,7 +106,6 @@ spec:
     app: austinapi
 
 ---
-
 kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
