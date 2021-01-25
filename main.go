@@ -317,7 +317,7 @@ func postBdayEmail(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Email not sent")
 }
 
-func getStockPrice(w http.ResponseWriter, r *http.Request) {
+func postStockPrice(w http.ResponseWriter, r *http.Request) {
 	var body []byte
 
 	if r.Body != nil {
@@ -440,7 +440,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/rps", postRPS).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rps/login", getRPSLogin).Methods("GET")
 	myRouter.HandleFunc("/austinapi/rps", getRPS).Methods("GET")
-	myRouter.HandleFunc("/austinapi/current-stock-price", getStockPrice).Methods("GET")
+	myRouter.HandleFunc("/austinapi/current-stock-price", postStockPrice).Methods("POST")
 	myRouter.HandleFunc("/austinapi/tendie-intern", getTwitterData).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl", getBotsFFL).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl", postBotsFFL).Methods("POST")
