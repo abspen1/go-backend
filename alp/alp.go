@@ -1,6 +1,7 @@
 package alp
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
@@ -8,6 +9,7 @@ import (
 	"github.com/alpacahq/alpaca-trade-api-go/common"
 )
 
+// Ticker struct holds stock
 type Ticker struct {
 	Stock string
 }
@@ -26,7 +28,7 @@ func initialize(ticker string) {
 
 	// fmt.Printf("Running w/ credentials [%v %v]\n", common.Credentials().ID, common.Credentials().Secret)
 
-	alpaca.SetBaseUrl(os.Getenv("https://paper-api.alpaca.markets"))
+	alpaca.SetBaseUrl(os.Getenv("APCA_API_BASE_URL"))
 	alpacaClient = alpacaClientContainer{
 		alpaca.NewClient(common.Credentials()),
 		"stock",
@@ -34,18 +36,23 @@ func initialize(ticker string) {
 	}
 }
 
-func FloatToString(input_num float64) string {
+func floatToString(num float64) string {
 	// to convert a float number to a string
-	return strconv.FormatFloat(input_num, 'f', 6, 64)
+	return strconv.FormatFloat(num, 'f', 6, 64)
 }
 
 func (alp alpacaClientContainer) getCurrPrice() string {
-	bars, _ := alp.client.GetSymbolBars(alpacaClient.stock, alpaca.ListBarParams{Timeframe: "minute", Limit: &alpacaClient.amtBars})
+	bars, err := alp.client.GetSymbolBars(alpacaClient.stock, alpaca.ListBarParams{Timeframe: "minute", Limit: &alpacaClient.amtBars})
+	if err != nil {
+		fmt.Println(err)
+		return "false"
+	}
 	currPrice := float64(bars[len(bars)-1].Close)
-	price := FloatToString(currPrice)
+	price := floatToString(currPrice)
 	return price
 }
 
+// GetCurrentPrice func returns the current price of given ticker
 func GetCurrentPrice(ticker string) string {
 	initialize(ticker)
 	return alpacaClient.getCurrPrice()
