@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"net/smtp"
 	"os"
+
+	"github.com/badoux/checkmail"
 )
 
 type smtpServer struct {
@@ -45,6 +47,43 @@ type Birthday struct {
 // GetBdayEmail func that will display info on this endpoint
 func GetBdayEmail(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Austin's bday emailer post address :)")
+}
+
+// GetEmail func to display simple email endpoint
+func GetEmail(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Send email endpoint, nothing to see here!")
+}
+
+// PostEmail func to send email
+func PostEmail(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var info Info
+	_ = json.Unmarshal(body, &info)
+
+	err := checkmail.ValidateFormat(info.Email)
+
+	if err != nil {
+		fmt.Println(err)
+		fmt.Fprintf(w, "Format Error")
+		return
+	}
+	err = checkmail.ValidateHost(info.Email)
+	if smtpErr, ok := err.(checkmail.SmtpError); ok && err != nil {
+		fmt.Printf("Code: %s, Msg: %s", smtpErr.Code(), smtpErr)
+		fmt.Fprintf(w, "Error")
+		return
+	}
+
+	if SendEmail(info) {
+		fmt.Fprintf(w, "Email sent successfully")
+		return
+	}
+	fmt.Fprintf(w, "Email not sent")
 }
 
 // PostBdayEmail func for sending email
