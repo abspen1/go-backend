@@ -78,15 +78,15 @@ spec:
                 secretKeyRef:
                   key: SECRET
                   name: go-back-end
-            - name: ALP-KEY
+            - name: APCA_API_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  key: ALP-KEY
+                  key: APCA_API_KEY_ID
                   name: go-back-end
-            - name: ALP-SECRET
+            - name: APCA_API_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  key: ALP-SECRET
+                  key: APCA_API_SECRET_KEY
                   name: go-back-end
 
 ---
