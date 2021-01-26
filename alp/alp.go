@@ -44,7 +44,6 @@ func PostStockPrice(w http.ResponseWriter, r *http.Request) {
 	var stock Ticker
 	_ = json.Unmarshal(body, &stock)
 
-	fmt.Println(stock.Stock)
 	resp := GetCurrentPrice(stock.Stock)
 	fmt.Fprintf(w, resp)
 }
@@ -53,7 +52,7 @@ func initialize(ticker string) {
 	os.Setenv(common.EnvApiKeyID, os.Getenv("APCA_API_KEY_ID"))
 	os.Setenv(common.EnvApiSecretKey, os.Getenv("APCA_API_SECRET_KEY"))
 
-	fmt.Printf("Running w/ credentials [%v %v]\n", common.Credentials().ID, common.Credentials().Secret)
+	// fmt.Printf("Running w/ credentials [%v %v]\n", common.Credentials().ID, common.Credentials().Secret)
 
 	alpaca.SetBaseUrl(os.Getenv("APCA_API_BASE_URL"))
 	alpacaClient = alpacaClientContainer{
@@ -79,6 +78,7 @@ func (alp alpacaClientContainer) getCurrPrice() string {
 	}
 	currPrice := float64(bars[len(bars)-1].Close)
 	price := floatToString(currPrice)
+	fmt.Println("Successfully retrieved current stock price.")
 	return price
 }
 
