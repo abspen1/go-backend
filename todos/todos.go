@@ -3,7 +3,9 @@ package todos
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/gomodule/redigo/redis"
@@ -26,6 +28,47 @@ type FullTodo struct {
 	Title     string
 	Completed bool
 	Id        int
+}
+
+// Get func to get the current todos
+func Get(w http.ResponseWriter, r *http.Request) {
+	todos := GetTodos()
+
+	json.NewEncoder(w).Encode(todos)
+}
+
+// Post func to add todos to the database
+func Post(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var info Todos
+	_ = json.Unmarshal(body, &info)
+	if AddTodo(info) {
+		fmt.Fprintf(w, "Added todo successfully")
+	}
+
+	fmt.Fprintf(w, "Todo not added due to an error")
+}
+
+// Remove func to remove todos from database
+func Remove(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var info FullTodo
+	_ = json.Unmarshal(body, &info)
+	if RmTodo(info) {
+		fmt.Fprintf(w, "Removed todo successfully")
+	}
+
+	fmt.Fprintf(w, "Todo wasn't removed due to an error")
 }
 
 // GetTodos function pulls todo hash from redis database
