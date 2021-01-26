@@ -27,7 +27,6 @@ import (
 	"github.com/abspen1/restful-go/email"
 
 	"github.com/abspen1/restful-go/rps"
-	"github.com/badoux/checkmail"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )
@@ -45,39 +44,6 @@ func postRPS(w http.ResponseWriter, r *http.Request) {
 	rpsUser = rps.SaveData(rpsUser)
 
 	json.NewEncoder(w).Encode(rpsUser)
-}
-
-func postRPSLogin(w http.ResponseWriter, r *http.Request) {
-	var info []byte
-
-	if r.Body != nil {
-		defer r.Body.Close()
-		info, _ = ioutil.ReadAll(r.Body)
-	}
-	var rpsUser rps.User
-	_ = json.Unmarshal(info, &rpsUser)
-
-	err := checkmail.ValidateFormat(rpsUser.Username)
-
-	if err != nil {
-		fmt.Println(err)
-		fmt.Fprintf(w, "Format Error")
-		return
-	}
-	err = checkmail.ValidateHost(rpsUser.Username)
-	if smtpErr, ok := err.(checkmail.SmtpError); ok && err != nil {
-		fmt.Printf("Code: %s, Msg: %s", smtpErr.Code(), smtpErr)
-		fmt.Fprintf(w, "Error")
-		return
-	}
-
-	rpsUser = rps.GetData(rpsUser)
-
-	json.NewEncoder(w).Encode(rpsUser)
-}
-
-func getRPSLogin(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Rock Paper Scissors game login endpoint, nothing to see here!")
 }
 
 func getRPS(w http.ResponseWriter, r *http.Request) {
