@@ -71,7 +71,7 @@ func (alp alpacaClientContainer) getCurrPrice() string {
 	bars, err := alp.client.GetSymbolBars(alpacaClient.stock, alpaca.ListBarParams{Timeframe: "minute", Limit: &alpacaClient.amtBars})
 	if err != nil {
 		fmt.Println(err)
-		return "false"
+		return "Error"
 	}
 	currPrice := float64(bars[len(bars)-1].Close)
 	price := floatToString(currPrice)
@@ -81,5 +81,6 @@ func (alp alpacaClientContainer) getCurrPrice() string {
 // GetCurrentPrice func returns the current price of given ticker
 func GetCurrentPrice(ticker string) string {
 	initialize(ticker)
+	fmt.Print(common.Credentials())
 	return alpacaClient.getCurrPrice()
 }
