@@ -20,6 +20,27 @@ type User struct {
 	Losses   int
 }
 
+// GetRPS func to show the info of this endpoint
+func GetRPS(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Rock Paper Scissors game save endpoint, nothing to see here!")
+}
+
+// PostRPS func to save the data
+func PostRPS(w http.ResponseWriter, r *http.Request) {
+	var info []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		info, _ = ioutil.ReadAll(r.Body)
+	}
+	var rpsUser User
+	_ = json.Unmarshal(info, &rpsUser)
+
+	rpsUser = SaveData(rpsUser)
+
+	json.NewEncoder(w).Encode(rpsUser)
+}
+
 // GetRPSLogin func to display what the endpoint is for
 func GetRPSLogin(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Rock Paper Scissors game login endpoint, nothing to see here!")
