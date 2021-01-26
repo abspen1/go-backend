@@ -173,12 +173,6 @@ func getTwitterData(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(data)
 }
 
-func getBotsFFL(w http.ResponseWriter, r *http.Request) {
-	leaders := botsffl.SetLeaders()
-
-	json.NewEncoder(w).Encode(leaders)
-}
-
 func getMwTeams(w http.ResponseWriter, r *http.Request) {
 	var roster players.Roster
 	roster = players.GetMidwestTeamNames()
@@ -251,39 +245,6 @@ func getWeeklyTrendDrop(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(weekly)
 }
 
-func postBotsFFL(w http.ResponseWriter, r *http.Request) {
-	var body []byte
-
-	if r.Body != nil {
-		defer r.Body.Close()
-		body, _ = ioutil.ReadAll(r.Body)
-	}
-	var info email.BotsFFL
-	_ = json.Unmarshal(body, &info)
-
-	err := checkmail.ValidateFormat(info.Email)
-
-	if err != nil {
-		fmt.Println(err)
-		fmt.Fprintf(w, "Format Error")
-		return
-	}
-
-	err = checkmail.ValidateHost(info.Email)
-	if smtpErr, ok := err.(checkmail.SmtpError); ok && err != nil {
-		fmt.Printf("Code: %s, Msg: %s", smtpErr.Code(), smtpErr)
-		fmt.Fprintf(w, "Error")
-		return
-	}
-
-	if email.SaveBotsInfo(info) {
-		botsffl.SaveProspect(info)
-		fmt.Fprintf(w, "Email sent successfully")
-		return
-	}
-	fmt.Fprintf(w, "Email not sent")
-}
-
 func postTweet(w http.ResponseWriter, r *http.Request) {
 	var body []byte
 
@@ -353,8 +314,8 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/", home.Page).Methods("GET")
 	myRouter.HandleFunc("/austinapi/bdayemail", email.PostBdayEmail).Methods("POST")
 	myRouter.HandleFunc("/austinapi/bdayemail", email.GetBdayEmail)
-	myRouter.HandleFunc("/austinapi/botsffl", getBotsFFL).Methods("GET")
-	myRouter.HandleFunc("/austinapi/botsffl", postBotsFFL).Methods("POST")
+	myRouter.HandleFunc("/austinapi/botsffl", botsffl.GetBotsFFL).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl", botsffl.PostBotsFFL).Methods("POST")
 	myRouter.HandleFunc("/austinapi/botsffl/teams/midwest", getMwTeams).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl/teams/west", getWTeams).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl/teams/northeast", getNeTeams).Methods("GET")
