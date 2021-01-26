@@ -69,13 +69,13 @@ func floatToString(num float64) string {
 }
 
 func (alp alpacaClientContainer) getCurrPrice() string {
-	bars, err := alp.client.GetSymbolBars(alpacaClient.stock, alpaca.ListBarParams{Timeframe: "day", Limit: &alpacaClient.amtBars})
+	bars, err := alp.client.GetSymbolBars(alpacaClient.stock, alpaca.ListBarParams{Timeframe: "minute", Limit: &alpacaClient.amtBars})
 	if err != nil {
 		fmt.Println(err)
-		return "Error"
+		return "500"
 	}
 	if len(bars) <= 0 {
-		return "No data found"
+		return "404"
 	}
 	currPrice := float64(bars[len(bars)-1].Close)
 	price := floatToString(currPrice)
