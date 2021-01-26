@@ -49,15 +49,15 @@ func PostStockPrice(w http.ResponseWriter, r *http.Request) {
 }
 
 func initialize(ticker string) {
-	os.Setenv(common.EnvApiKeyID, os.Getenv("ALP-KEY"))
-	os.Setenv(common.EnvApiSecretKey, os.Getenv("ALP-SECRET"))
+	os.Setenv(common.EnvApiKeyID, os.Getenv("APCA_API_KEY_ID"))
+	os.Setenv(common.EnvApiSecretKey, os.Getenv("APCA_API_SECRET_KEY"))
 
 	// fmt.Printf("Running w/ credentials [%v %v]\n", common.Credentials().ID, common.Credentials().Secret)
 
 	alpaca.SetBaseUrl(os.Getenv("APCA_API_BASE_URL"))
 	alpacaClient = alpacaClientContainer{
 		alpaca.NewClient(common.Credentials()),
-		"stock",
+		ticker,
 		10,
 	}
 }
