@@ -27,7 +27,7 @@ type Todos struct {
 type FullTodo struct {
 	Title     string
 	Completed bool
-	Id        int
+	ID        int
 }
 
 // Get func to get the current todos
@@ -110,7 +110,7 @@ func GetTodos() []FullTodo {
 		json.Unmarshal([]byte(todoSlice[i]), &unencoded)
 		fullTodo.Title = unencoded.Title
 		fullTodo.Completed = unencoded.Completed
-		fullTodo.Id = unencoded.Id
+		fullTodo.ID = unencoded.ID
 		todoSliceUnencoded = append(todoSliceUnencoded, fullTodo)
 		i++
 	}
@@ -142,7 +142,7 @@ func AddTodo(todos Todos) bool {
 	fullTodo.Title = todos.Title
 	fullTodo.Completed = todos.Completed
 	id, err := redis.Int(client.Do("GET", "todo-id"))
-	fullTodo.Id = id
+	fullTodo.ID = id
 	if err != nil {
 		return false
 	}
@@ -177,7 +177,7 @@ func RmTodo(fullTodo FullTodo) bool {
 	todo := FullTodo{
 		Title:     fullTodo.Title,
 		Completed: fullTodo.Completed,
-		Id:        fullTodo.Id,
+		ID:        fullTodo.ID,
 	}
 
 	todoEn, err := json.Marshal(todo)
