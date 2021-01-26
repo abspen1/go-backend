@@ -3,7 +3,9 @@ package projects
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/gomodule/redigo/redis"
@@ -32,6 +34,58 @@ type RmProject struct {
 	Language    string
 	Description string
 	Password    string
+}
+
+// GetProjects func to get the current projects
+func GetProjects(w http.ResponseWriter, r *http.Request) {
+	s := GetString()
+
+	json.NewEncoder(w).Encode(s)
+}
+
+// GetRmProjects func to show what this endpoint displays
+func GetRmProjects(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Remove projects endpoint, nothing to see here!")
+}
+
+// PostProjects func to add projects to database
+func PostProjects(w http.ResponseWriter, r *http.Request) {
+	var info []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		info, _ = ioutil.ReadAll(r.Body)
+	}
+	var proj Project
+	_ = json.Unmarshal(info, &proj)
+	SetString(proj)
+	fmt.Fprintf(w, string(info))
+
+	// fmt.Fprintf(w, "Test POST endpoint worked!")
+}
+
+// PostRmProjects func to remove projects from database
+func PostRmProjects(w http.ResponseWriter, r *http.Request) {
+	var info []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		info, _ = ioutil.ReadAll(r.Body)
+	}
+	var proj RmProject
+	_ = json.Unmarshal(info, &proj)
+
+	if CheckPass(proj) {
+		if RmString(proj) {
+			fmt.Fprintf(w, "POST remove worked!")
+		} else {
+			fmt.Fprintf(w, "Error")
+		}
+	} else {
+		fmt.Fprintf(w, "Err")
+	}
+
+	// fmt.Fprintf(w, "Test POST endpoint worked!")
 }
 
 // GetString function

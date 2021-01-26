@@ -1,10 +1,15 @@
 package botsffl
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/abspen1/restful-go/email"
+	"github.com/badoux/checkmail"
 
 	"github.com/gomodule/redigo/redis"
 )
@@ -111,6 +116,47 @@ type Leaders struct {
 	PointsW10    string
 	PointsW11    string
 	PointsW12    string
+}
+
+// GetBotsFFL func to show info on endpoint
+func GetBotsFFL(w http.ResponseWriter, r *http.Request) {
+	leaders := SetLeaders()
+
+	json.NewEncoder(w).Encode(leaders)
+}
+
+// PostBotsFFL func
+func PostBotsFFL(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var info email.BotsFFL
+	_ = json.Unmarshal(body, &info)
+
+	err := checkmail.ValidateFormat(info.Email)
+
+	if err != nil {
+		fmt.Println(err)
+		fmt.Fprintf(w, "Format Error")
+		return
+	}
+
+	err = checkmail.ValidateHost(info.Email)
+	if smtpErr, ok := err.(checkmail.SmtpError); ok && err != nil {
+		fmt.Printf("Code: %s, Msg: %s", smtpErr.Code(), smtpErr)
+		fmt.Fprintf(w, "Error")
+		return
+	}
+
+	if email.SaveBotsInfo(info) {
+		SaveProspect(info)
+		fmt.Fprintf(w, "Email sent successfully")
+		return
+	}
+	fmt.Fprintf(w, "Email not sent")
 }
 
 // SetLeaders function

@@ -1,7 +1,9 @@
 package players
 
 import (
+	"encoding/json"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 
@@ -22,6 +24,34 @@ type Roster struct {
 	Team10 string
 	Team11 string
 	Team12 string
+}
+
+// GetMwTeams func to set the midwest team names
+func GetMwTeams(w http.ResponseWriter, r *http.Request) {
+	var roster Roster
+	roster = GetMidwestTeamNames()
+	json.NewEncoder(w).Encode(roster)
+}
+
+// GetWTeams func to set the west team names
+func GetWTeams(w http.ResponseWriter, r *http.Request) {
+	var roster Roster
+	roster = GetWestTeamNames()
+	json.NewEncoder(w).Encode(roster)
+}
+
+// GetNeTeams func to set the northeast team names
+func GetNeTeams(w http.ResponseWriter, r *http.Request) {
+	var roster Roster
+	roster = GetNortheastTeamNames()
+	json.NewEncoder(w).Encode(roster)
+}
+
+// GetSeTeams func to set the southeast team names
+func GetSeTeams(w http.ResponseWriter, r *http.Request) {
+	var roster Roster
+	roster = GetSoutheastTeamNames()
+	json.NewEncoder(w).Encode(roster)
 }
 
 // GetMidwestTeamNames function

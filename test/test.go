@@ -6,10 +6,9 @@ import (
 	"net/smtp"
 	"os"
 
-	"github.com/abspen1/restful-go/players/trending"
-
 	"github.com/abspen1/restful-go/todos"
 
+	"github.com/abspen1/restful-go/alp"
 	"github.com/gomodule/redigo/redis"
 )
 
@@ -164,16 +163,11 @@ func testTodos() {
 	fmt.Println(todos.GetTodos())
 }
 
+func testAlp() {
+	resp := alp.GetCurrentPrice("TSLA")
+	fmt.Println(resp)
+}
+
 func main() {
-	// var roster players.Roster
-	// roster = players.GetMidwestTeamNames()
-	// fmt.Println(roster)
-	// roster = players.GetNortheastTeamNames()
-	// fmt.Println(roster)
-	// roster = players.GetSoutheastTeamNames()
-	// fmt.Println(roster)
-	// roster = players.GetWestTeamNames()
-	// fmt.Println(roster)
-	fmt.Println(trending.DailyAdd())
-	fmt.Println(trending.WeeklyAdd())
+	testAlp()
 }

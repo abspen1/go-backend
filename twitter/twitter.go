@@ -1,8 +1,10 @@
 package twitter
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/gomodule/redigo/redis"
@@ -16,6 +18,13 @@ type Data struct {
 	TweetsRead  int
 	LatestTweet string
 	Accuracy    string
+}
+
+// Get func to get the twitter data for Bottimus
+func Get(w http.ResponseWriter, r *http.Request) {
+	data := GetTwitterData()
+
+	json.NewEncoder(w).Encode(data)
 }
 
 // GetTwitterData function

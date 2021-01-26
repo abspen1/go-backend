@@ -1,7 +1,9 @@
 package rosters
 
 import (
+	"encoding/json"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 
@@ -78,6 +80,34 @@ type Roster struct {
 	Position25 string `json:"position25,omitempty"`
 	Player26   string `json:"player26,omitempty"`
 	Position26 string `json:"position26,omitempty"`
+}
+
+// GetMwRosters func to set players on the rosters
+func GetMwRosters(w http.ResponseWriter, r *http.Request) {
+	var roster Team
+	roster = GetMidwestTeamRosters()
+	json.NewEncoder(w).Encode(roster)
+}
+
+// GetNeRosters func to set players on the rosters
+func GetNeRosters(w http.ResponseWriter, r *http.Request) {
+	var roster Team
+	roster = GetNortheastTeamRosters()
+	json.NewEncoder(w).Encode(roster)
+}
+
+// GetWRosters func to set players on the rosters
+func GetWRosters(w http.ResponseWriter, r *http.Request) {
+	var roster Team
+	roster = GetWestTeamRosters()
+	json.NewEncoder(w).Encode(roster)
+}
+
+// GetSeRosters func to set players on the rosters
+func GetSeRosters(w http.ResponseWriter, r *http.Request) {
+	var roster Team
+	roster = GetSoutheastTeamRosters()
+	json.NewEncoder(w).Encode(roster)
 }
 
 // GetMidwestTeamRosters function

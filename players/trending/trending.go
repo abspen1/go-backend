@@ -1,7 +1,9 @@
 package trending
 
 import (
+	"encoding/json"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 
@@ -62,6 +64,34 @@ type WeekDrop struct {
 	WeekDrop8  string
 	WeekDrop9  string
 	WeekDrop10 string
+}
+
+// GetDailyTrendAdd func gets the top added players on sleeper.app
+func GetDailyTrendAdd(w http.ResponseWriter, r *http.Request) {
+	var daily DayAdd
+	daily = DailyAdd()
+	json.NewEncoder(w).Encode(daily)
+}
+
+// GetDailyTrendDrop func gets the top added players on sleeper.app
+func GetDailyTrendDrop(w http.ResponseWriter, r *http.Request) {
+	var daily DayDrop
+	daily = DailyDrop()
+	json.NewEncoder(w).Encode(daily)
+}
+
+// GetWeeklyTrendAdd func gets the top added players on sleeper.app
+func GetWeeklyTrendAdd(w http.ResponseWriter, r *http.Request) {
+	var weekly WeekAdd
+	weekly = WeeklyAdd()
+	json.NewEncoder(w).Encode(weekly)
+}
+
+// GetWeeklyTrendDrop func gets the top added players on sleeper.app
+func GetWeeklyTrendDrop(w http.ResponseWriter, r *http.Request) {
+	var weekly WeekDrop
+	weekly = WeeklyDrop()
+	json.NewEncoder(w).Encode(weekly)
 }
 
 //DailyAdd function will return the DayAdd trending players from sleeper API
