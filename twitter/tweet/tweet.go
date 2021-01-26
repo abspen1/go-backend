@@ -4,6 +4,7 @@ import (
 	// other imports
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/dghubble/go-twitter/twitter"
@@ -24,6 +25,14 @@ type Credentials struct {
 	ConsumerSecret    string
 	AccessToken       string
 	AccessTokenSecret string
+}
+
+// GetTweet func just displays simple text at the endpoint
+func GetTweet(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, `<body style="text-align:center;">
+	<h1>Go twitter bot post tweet endpoint, nothing to see here!<h1>
+	<img src="https://www.logo.wine/a/logo/Go_(programming_language)/Go_(programming_language)-Logo.wine.svg" alt="Go Logo">
+	</body>`)
 }
 
 // getClient is a helper function that will return a twitter client
