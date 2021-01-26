@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/abspen1/restful-go/todos"
+	"github.com/abspen1/restful-go/twitter"
 
 	"github.com/abspen1/restful-go/projects"
 
@@ -65,7 +66,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/rps", rps.PostRPS).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rps/login", rps.GetRPSLogin).Methods("GET")
 	myRouter.HandleFunc("/austinapi/rps/login", rps.PostRPSLogin).Methods("POST")
-	myRouter.HandleFunc("/austinapi/tendie-intern", getTwitterData).Methods("GET")
+	myRouter.HandleFunc("/austinapi/tendie-intern", twitter.Get).Methods("GET")
 	myRouter.HandleFunc("/austinapi/todos", todos.Get).Methods("GET")
 	myRouter.HandleFunc("/austinapi/todos", todos.Post).Methods("POST")
 	myRouter.HandleFunc("/austinapi/todos/rm", todos.Remove).Methods("POST")
