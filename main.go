@@ -1,11 +1,10 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/abspen1/restful-go/todos"
 
 	"github.com/abspen1/restful-go/projects"
 
@@ -18,11 +17,7 @@ import (
 	"github.com/abspen1/restful-go/players/rosters"
 	"github.com/abspen1/restful-go/players/trending"
 
-	"github.com/abspen1/restful-go/todos"
-
 	"github.com/abspen1/restful-go/botsffl"
-
-	"github.com/abspen1/restful-go/twitter"
 
 	"github.com/abspen1/restful-go/email"
 
@@ -30,68 +25,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )
-
-func postRPS(w http.ResponseWriter, r *http.Request) {
-	var info []byte
-
-	if r.Body != nil {
-		defer r.Body.Close()
-		info, _ = ioutil.ReadAll(r.Body)
-	}
-	var rpsUser rps.User
-	_ = json.Unmarshal(info, &rpsUser)
-
-	rpsUser = rps.SaveData(rpsUser)
-
-	json.NewEncoder(w).Encode(rpsUser)
-}
-
-func getRPS(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Rock Paper Scissors game save endpoint, nothing to see here!")
-}
-
-func getTwitterData(w http.ResponseWriter, r *http.Request) {
-	data := twitter.GetTwitterData()
-
-	json.NewEncoder(w).Encode(data)
-}
-
-func getTodos(w http.ResponseWriter, r *http.Request) {
-	todos := todos.GetTodos()
-
-	json.NewEncoder(w).Encode(todos)
-}
-
-func postTodos(w http.ResponseWriter, r *http.Request) {
-	var body []byte
-
-	if r.Body != nil {
-		defer r.Body.Close()
-		body, _ = ioutil.ReadAll(r.Body)
-	}
-	var info todos.Todos
-	_ = json.Unmarshal(body, &info)
-	if todos.AddTodo(info) {
-		fmt.Fprintf(w, "Added todo successfully")
-	}
-
-	fmt.Fprintf(w, "Todo not added due to an error")
-}
-func rmTodos(w http.ResponseWriter, r *http.Request) {
-	var body []byte
-
-	if r.Body != nil {
-		defer r.Body.Close()
-		body, _ = ioutil.ReadAll(r.Body)
-	}
-	var info todos.FullTodo
-	_ = json.Unmarshal(body, &info)
-	if todos.RmTodo(info) {
-		fmt.Fprintf(w, "Removed todo successfully")
-	}
-
-	fmt.Fprintf(w, "Todo wasn't removed due to an error")
-}
 
 func handleRequests() {
 	c := cors.New(cors.Options{
@@ -128,14 +61,14 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/projects", projects.PostProjects).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rmprojects", projects.GetRmProjects).Methods("GET")
 	myRouter.HandleFunc("/austinapi/rmprojects", projects.PostRmProjects).Methods("POST")
-	myRouter.HandleFunc("/austinapi/rps/login", postRPSLogin).Methods("POST")
-	myRouter.HandleFunc("/austinapi/rps", postRPS).Methods("POST")
-	myRouter.HandleFunc("/austinapi/rps/login", getRPSLogin).Methods("GET")
-	myRouter.HandleFunc("/austinapi/rps", getRPS).Methods("GET")
+	myRouter.HandleFunc("/austinapi/rps", rps.GetRPS).Methods("GET")
+	myRouter.HandleFunc("/austinapi/rps", rps.PostRPS).Methods("POST")
+	myRouter.HandleFunc("/austinapi/rps/login", rps.GetRPSLogin).Methods("GET")
+	myRouter.HandleFunc("/austinapi/rps/login", rps.PostRPSLogin).Methods("POST")
 	myRouter.HandleFunc("/austinapi/tendie-intern", getTwitterData).Methods("GET")
-	myRouter.HandleFunc("/austinapi/todos", getTodos).Methods("GET")
-	myRouter.HandleFunc("/austinapi/todos", postTodos).Methods("POST")
-	myRouter.HandleFunc("/austinapi/todos/rm", rmTodos).Methods("POST")
+	myRouter.HandleFunc("/austinapi/todos", todos.Get).Methods("GET")
+	myRouter.HandleFunc("/austinapi/todos", todos.Post).Methods("POST")
+	myRouter.HandleFunc("/austinapi/todos/rm", todos.Remove).Methods("POST")
 
 	handler := c.Handler(myRouter)
 	log.Fatal(http.ListenAndServe(":8558", handler))
