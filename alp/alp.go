@@ -53,7 +53,7 @@ func initialize(ticker string) {
 	os.Setenv(common.EnvApiKeyID, os.Getenv("APCA_API_KEY_ID"))
 	os.Setenv(common.EnvApiSecretKey, os.Getenv("APCA_API_SECRET_KEY"))
 
-	// fmt.Printf("Running w/ credentials [%v %v]\n", common.Credentials().ID, common.Credentials().Secret)
+	fmt.Printf("Running w/ credentials [%v %v]\n", common.Credentials().ID, common.Credentials().Secret)
 
 	alpaca.SetBaseUrl(os.Getenv("APCA_API_BASE_URL"))
 	alpacaClient = alpacaClientContainer{
@@ -74,6 +74,7 @@ func (alp alpacaClientContainer) getCurrPrice() string {
 		fmt.Println(err)
 		return "Error"
 	}
+	fmt.Println(len(bars))
 	currPrice := float64(bars[len(bars)-1].Close)
 	price := floatToString(currPrice)
 	return price
@@ -82,6 +83,5 @@ func (alp alpacaClientContainer) getCurrPrice() string {
 // GetCurrentPrice func returns the current price of given ticker
 func GetCurrentPrice(ticker string) string {
 	initialize(ticker)
-	fmt.Println(common.Credentials())
 	return alpacaClient.getCurrPrice()
 }
