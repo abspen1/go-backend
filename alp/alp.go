@@ -1,7 +1,10 @@
 package alp
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"os"
 	"strconv"
 
@@ -21,6 +24,29 @@ type alpacaClientContainer struct {
 }
 
 var alpacaClient alpacaClientContainer
+
+// Get func just displays simple text at the endpoint
+func Get(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, `<body style="text-align:center;">
+	<h1>Current stock price endpoint written in Go!<h1>
+	<img src="https://mms.businesswire.com/media/20181023005433/en/686001/5/Alpaca_Logo_yellow.jpg" alt="Alpaca Logo">
+	</body>`)
+}
+
+// PostStockPrice func is endpoint Post request
+func PostStockPrice(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var stock Ticker
+	_ = json.Unmarshal(body, &stock)
+
+	resp := GetCurrentPrice(stock.Stock)
+	fmt.Fprintf(w, resp)
+}
 
 func initialize(ticker string) {
 	os.Setenv(common.EnvApiKeyID, os.Getenv("ALP-KEY"))
