@@ -1,7 +1,10 @@
 package email
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"net/smtp"
 	"os"
 )
@@ -37,6 +40,35 @@ type Birthday struct {
 	JokeSetup     string
 	JokePunchLine string
 	Auth          string
+}
+
+// GetBdayEmail func that will display info on this endpoint
+func GetBdayEmail(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Austin's bday emailer post address :)")
+}
+
+// PostBdayEmail func for sending email
+func PostBdayEmail(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var info Birthday
+	_ = json.Unmarshal(body, &info)
+	resp := SendBdayEmail(info)
+	if resp == "Success" {
+		fmt.Fprintf(w, "Email sent successfully")
+		return
+	}
+
+	if resp == "Auth Err" {
+		fmt.Fprintf(w, "Invalid Authentification")
+		return
+	}
+
+	fmt.Fprintf(w, "Email not sent")
 }
 
 // SendEmail function

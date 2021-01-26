@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/abspen1/restful-go/alp"
 	"github.com/abspen1/restful-go/home"
 	"github.com/abspen1/restful-go/twitter/tweet"
 
@@ -15,7 +16,6 @@ import (
 
 	"github.com/abspen1/restful-go/players/rosters"
 
-	"github.com/abspen1/restful-go/alp"
 	"github.com/abspen1/restful-go/players"
 	"github.com/abspen1/restful-go/todos"
 
@@ -284,47 +284,6 @@ func postBotsFFL(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Email not sent")
 }
 
-func getBdayEmail(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Austin's bday emailer post address :)")
-}
-
-func postBdayEmail(w http.ResponseWriter, r *http.Request) {
-	var body []byte
-
-	if r.Body != nil {
-		defer r.Body.Close()
-		body, _ = ioutil.ReadAll(r.Body)
-	}
-	var info email.Birthday
-	_ = json.Unmarshal(body, &info)
-	resp := email.SendBdayEmail(info)
-	if resp == "Success" {
-		fmt.Fprintf(w, "Email sent successfully")
-		return
-	}
-
-	if resp == "Auth Err" {
-		fmt.Fprintf(w, "Invalid Authentification")
-		return
-	}
-
-	fmt.Fprintf(w, "Email not sent")
-}
-
-func postStockPrice(w http.ResponseWriter, r *http.Request) {
-	var body []byte
-
-	if r.Body != nil {
-		defer r.Body.Close()
-		body, _ = ioutil.ReadAll(r.Body)
-	}
-	var stock alp.Ticker
-	_ = json.Unmarshal(body, &stock)
-
-	resp := alp.GetCurrentPrice(stock.Stock)
-	fmt.Fprintf(w, resp)
-}
-
 func postTweet(w http.ResponseWriter, r *http.Request) {
 	var body []byte
 
@@ -392,27 +351,10 @@ func handleRequests() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 
 	myRouter.HandleFunc("/austinapi/", home.Page).Methods("GET")
-	myRouter.HandleFunc("/austinapi/go-tweet", postTweet).Methods("POST")
-	myRouter.HandleFunc("/austinapi/go-tweet", tweet.GetTweet).Methods("GET")
-	myRouter.HandleFunc("/austinapi/projects", getProjects).Methods("GET")
-	myRouter.HandleFunc("/austinapi/projects", postProjects).Methods("POST")
-	myRouter.HandleFunc("/austinapi/rmprojects", postRmprojects).Methods("POST")
-	myRouter.HandleFunc("/austinapi/rmprojects", getRmprojects)
-	myRouter.HandleFunc("/austinapi/email", sendEmail).Methods("POST")
-	myRouter.HandleFunc("/austinapi/email", getEmail).Methods("GET")
-	myRouter.HandleFunc("/austinapi/rps/login", postRPSLogin).Methods("POST")
-	myRouter.HandleFunc("/austinapi/rps", postRPS).Methods("POST")
-	myRouter.HandleFunc("/austinapi/rps/login", getRPSLogin).Methods("GET")
-	myRouter.HandleFunc("/austinapi/rps", getRPS).Methods("GET")
-	myRouter.HandleFunc("/austinapi/current-stock-price", postStockPrice).Methods("POST")
-	myRouter.HandleFunc("/austinapi/tendie-intern", getTwitterData).Methods("GET")
+	myRouter.HandleFunc("/austinapi/bdayemail", email.PostBdayEmail).Methods("POST")
+	myRouter.HandleFunc("/austinapi/bdayemail", email.GetBdayEmail)
 	myRouter.HandleFunc("/austinapi/botsffl", getBotsFFL).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl", postBotsFFL).Methods("POST")
-	myRouter.HandleFunc("/austinapi/bdayemail", postBdayEmail).Methods("POST")
-	myRouter.HandleFunc("/austinapi/bdayemail", getBdayEmail)
-	myRouter.HandleFunc("/austinapi/todos", getTodos).Methods("GET")
-	myRouter.HandleFunc("/austinapi/todos", postTodos).Methods("POST")
-	myRouter.HandleFunc("/austinapi/todos/rm", rmTodos).Methods("POST")
 	myRouter.HandleFunc("/austinapi/botsffl/teams/midwest", getMwTeams).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl/teams/west", getWTeams).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl/teams/northeast", getNeTeams).Methods("GET")
@@ -425,6 +367,24 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/botsffl/trending/daily/drop", getDailyTrendDrop).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl/trending/weekly/add", getWeeklyTrendAdd).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl/trending/weekly/drop", getWeeklyTrendDrop).Methods("GET")
+	myRouter.HandleFunc("/austinapi/current-stock-price", alp.Get).Methods("GET")
+	myRouter.HandleFunc("/austinapi/current-stock-price", alp.PostStockPrice).Methods("POST")
+	myRouter.HandleFunc("/austinapi/email", sendEmail).Methods("POST")
+	myRouter.HandleFunc("/austinapi/email", getEmail).Methods("GET")
+	myRouter.HandleFunc("/austinapi/go-tweet", postTweet).Methods("POST")
+	myRouter.HandleFunc("/austinapi/go-tweet", tweet.GetTweet).Methods("GET")
+	myRouter.HandleFunc("/austinapi/projects", getProjects).Methods("GET")
+	myRouter.HandleFunc("/austinapi/projects", postProjects).Methods("POST")
+	myRouter.HandleFunc("/austinapi/rmprojects", getRmprojects).Methods("GET")
+	myRouter.HandleFunc("/austinapi/rmprojects", postRmprojects).Methods("POST")
+	myRouter.HandleFunc("/austinapi/rps/login", postRPSLogin).Methods("POST")
+	myRouter.HandleFunc("/austinapi/rps", postRPS).Methods("POST")
+	myRouter.HandleFunc("/austinapi/rps/login", getRPSLogin).Methods("GET")
+	myRouter.HandleFunc("/austinapi/rps", getRPS).Methods("GET")
+	myRouter.HandleFunc("/austinapi/tendie-intern", getTwitterData).Methods("GET")
+	myRouter.HandleFunc("/austinapi/todos", getTodos).Methods("GET")
+	myRouter.HandleFunc("/austinapi/todos", postTodos).Methods("POST")
+	myRouter.HandleFunc("/austinapi/todos/rm", rmTodos).Methods("POST")
 
 	handler := c.Handler(myRouter)
 	log.Fatal(http.ListenAndServe(":8558", handler))
