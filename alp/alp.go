@@ -44,6 +44,7 @@ func PostStockPrice(w http.ResponseWriter, r *http.Request) {
 	var stock Ticker
 	_ = json.Unmarshal(body, &stock)
 
+	fmt.Println(stock.Stock)
 	resp := GetCurrentPrice(stock.Stock)
 	fmt.Fprintf(w, resp)
 }
@@ -81,6 +82,6 @@ func (alp alpacaClientContainer) getCurrPrice() string {
 // GetCurrentPrice func returns the current price of given ticker
 func GetCurrentPrice(ticker string) string {
 	initialize(ticker)
-	fmt.Print(common.Credentials())
+	fmt.Println(common.Credentials())
 	return alpacaClient.getCurrPrice()
 }
