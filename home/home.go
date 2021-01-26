@@ -12,6 +12,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	<h3>Random</h3>
 	<p><a href="/austinapi/projects">Projects</a></p>
 	<p><a href="/austinapi/rmprojects">Remove Projects</a></p>
+	<p><a href="/austinapi/current-stock-price">Current Stock Price</a></p>
 	<p><a href="/austinapi/rps/login">Rock Paper Scissors Login</a></p>
 	<p><a href="/austinapi/rps/">Rock Paper Scissors Save</a></p>
 	<p><a href="/austinapi/bdayemail">Bday Emailer</a></p>
