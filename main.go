@@ -6,7 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
+
+	"github.com/abspen1/restful-go/projects"
 
 	"github.com/abspen1/restful-go/players"
 
@@ -25,87 +26,11 @@ import (
 
 	"github.com/abspen1/restful-go/email"
 
-	"github.com/abspen1/restful-go/projects"
 	"github.com/abspen1/restful-go/rps"
 	"github.com/badoux/checkmail"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )
-
-func getProjects(w http.ResponseWriter, r *http.Request) {
-	s := projects.GetString()
-
-	json.NewEncoder(w).Encode(s)
-}
-
-func postProjects(w http.ResponseWriter, r *http.Request) {
-	var info []byte
-
-	if r.Body != nil {
-		defer r.Body.Close()
-		info, _ = ioutil.ReadAll(r.Body)
-	}
-	var proj projects.Project
-	_ = json.Unmarshal(info, &proj)
-	projects.SetString(proj)
-	fmt.Fprintf(w, string(info))
-
-	// fmt.Fprintf(w, "Test POST endpoint worked!")
-}
-
-func postRmprojects(w http.ResponseWriter, r *http.Request) {
-	var info []byte
-
-	if r.Body != nil {
-		defer r.Body.Close()
-		info, _ = ioutil.ReadAll(r.Body)
-	}
-	var proj projects.RmProject
-	_ = json.Unmarshal(info, &proj)
-
-	if projects.CheckPass(proj) {
-		if projects.RmString(proj) {
-			fmt.Fprintf(w, "POST remove worked!")
-		} else {
-			fmt.Fprintf(w, "Error")
-		}
-	} else {
-		fmt.Fprintf(w, "Err")
-	}
-
-	// fmt.Fprintf(w, "Test POST endpoint worked!")
-}
-
-func sendEmail(w http.ResponseWriter, r *http.Request) {
-	var body []byte
-
-	if r.Body != nil {
-		defer r.Body.Close()
-		body, _ = ioutil.ReadAll(r.Body)
-	}
-	var info email.Info
-	_ = json.Unmarshal(body, &info)
-
-	err := checkmail.ValidateFormat(info.Email)
-
-	if err != nil {
-		fmt.Println(err)
-		fmt.Fprintf(w, "Format Error")
-		return
-	}
-	err = checkmail.ValidateHost(info.Email)
-	if smtpErr, ok := err.(checkmail.SmtpError); ok && err != nil {
-		fmt.Printf("Code: %s, Msg: %s", smtpErr.Code(), smtpErr)
-		fmt.Fprintf(w, "Error")
-		return
-	}
-
-	if email.SendEmail(info) {
-		fmt.Fprintf(w, "Email sent successfully")
-		return
-	}
-	fmt.Fprintf(w, "Email not sent")
-}
 
 func postRPS(w http.ResponseWriter, r *http.Request) {
 	var info []byte
@@ -159,39 +84,10 @@ func getRPS(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Rock Paper Scissors game save endpoint, nothing to see here!")
 }
 
-func getEmail(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Send email endpoint, nothing to see here!")
-}
-
-func getRmprojects(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Remove projects endpoint, nothing to see here!")
-}
-
 func getTwitterData(w http.ResponseWriter, r *http.Request) {
 	data := twitter.GetTwitterData()
 
 	json.NewEncoder(w).Encode(data)
-}
-
-func postTweet(w http.ResponseWriter, r *http.Request) {
-	var body []byte
-
-	if r.Body != nil {
-		defer r.Body.Close()
-		body, _ = ioutil.ReadAll(r.Body)
-	}
-	var content tweet.Content
-	_ = json.Unmarshal(body, &content)
-	if content.Auth != os.Getenv("SECRET") {
-		fmt.Fprintf(w, "Invalid Authentification")
-		return
-	}
-	resp := tweet.Tweet(content)
-	if resp == true {
-		fmt.Fprintf(w, "Tweet sent successfully")
-	} else {
-		fmt.Fprintf(w, "Error in postTweet")
-	}
 }
 
 func getTodos(w http.ResponseWriter, r *http.Request) {
@@ -258,14 +154,14 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/botsffl/trending/weekly/drop", trending.GetWeeklyTrendDrop).Methods("GET")
 	myRouter.HandleFunc("/austinapi/current-stock-price", alp.Get).Methods("GET")
 	myRouter.HandleFunc("/austinapi/current-stock-price", alp.PostStockPrice).Methods("POST")
-	myRouter.HandleFunc("/austinapi/email", sendEmail).Methods("POST")
-	myRouter.HandleFunc("/austinapi/email", getEmail).Methods("GET")
-	myRouter.HandleFunc("/austinapi/go-tweet", postTweet).Methods("POST")
-	myRouter.HandleFunc("/austinapi/go-tweet", tweet.GetTweet).Methods("GET")
-	myRouter.HandleFunc("/austinapi/projects", getProjects).Methods("GET")
-	myRouter.HandleFunc("/austinapi/projects", postProjects).Methods("POST")
-	myRouter.HandleFunc("/austinapi/rmprojects", getRmprojects).Methods("GET")
-	myRouter.HandleFunc("/austinapi/rmprojects", postRmprojects).Methods("POST")
+	myRouter.HandleFunc("/austinapi/email", email.PostEmail).Methods("POST")
+	myRouter.HandleFunc("/austinapi/email", email.GetEmail).Methods("GET")
+	myRouter.HandleFunc("/austinapi/go-tweet", tweet.Post).Methods("POST")
+	myRouter.HandleFunc("/austinapi/go-tweet", tweet.Get).Methods("GET")
+	myRouter.HandleFunc("/austinapi/projects", projects.GetProjects).Methods("GET")
+	myRouter.HandleFunc("/austinapi/projects", projects.PostProjects).Methods("POST")
+	myRouter.HandleFunc("/austinapi/rmprojects", projects.GetRmProjects).Methods("GET")
+	myRouter.HandleFunc("/austinapi/rmprojects", projects.PostRmProjects).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rps/login", postRPSLogin).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rps", postRPS).Methods("POST")
 	myRouter.HandleFunc("/austinapi/rps/login", getRPSLogin).Methods("GET")

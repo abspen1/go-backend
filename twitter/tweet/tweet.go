@@ -2,7 +2,9 @@ package tweet
 
 import (
 	// other imports
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -27,12 +29,34 @@ type Credentials struct {
 	AccessTokenSecret string
 }
 
-// GetTweet func just displays simple text at the endpoint
-func GetTweet(w http.ResponseWriter, r *http.Request) {
+// Get func just displays simple text at the endpoint
+func Get(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `<body style="text-align:center;">
 	<h1>Go twitter bot post tweet endpoint, nothing to see here!<h1>
 	<img src="https://www.logo.wine/a/logo/Go_(programming_language)/Go_(programming_language)-Logo.wine.svg" alt="Go Logo">
 	</body>`)
+}
+
+// Post func to send tweet
+func Post(w http.ResponseWriter, r *http.Request) {
+	var body []byte
+
+	if r.Body != nil {
+		defer r.Body.Close()
+		body, _ = ioutil.ReadAll(r.Body)
+	}
+	var content Content
+	_ = json.Unmarshal(body, &content)
+	if content.Auth != os.Getenv("SECRET") {
+		fmt.Fprintf(w, "Invalid Authentification")
+		return
+	}
+	resp := Tweet(content)
+	if resp == true {
+		fmt.Fprintf(w, "Tweet sent successfully")
+	} else {
+		fmt.Fprintf(w, "Error in postTweet")
+	}
 }
 
 // getClient is a helper function that will return a twitter client
