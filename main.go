@@ -8,15 +8,15 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/abspen1/restful-go/players"
+
 	"github.com/abspen1/restful-go/alp"
 	"github.com/abspen1/restful-go/home"
 	"github.com/abspen1/restful-go/twitter/tweet"
 
+	"github.com/abspen1/restful-go/players/rosters"
 	"github.com/abspen1/restful-go/players/trending"
 
-	"github.com/abspen1/restful-go/players/rosters"
-
-	"github.com/abspen1/restful-go/players"
 	"github.com/abspen1/restful-go/todos"
 
 	"github.com/abspen1/restful-go/botsffl"
@@ -173,78 +173,6 @@ func getTwitterData(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(data)
 }
 
-func getMwTeams(w http.ResponseWriter, r *http.Request) {
-	var roster players.Roster
-	roster = players.GetMidwestTeamNames()
-	json.NewEncoder(w).Encode(roster)
-}
-
-func getWTeams(w http.ResponseWriter, r *http.Request) {
-	var roster players.Roster
-	roster = players.GetWestTeamNames()
-	json.NewEncoder(w).Encode(roster)
-}
-
-func getNeTeams(w http.ResponseWriter, r *http.Request) {
-	var roster players.Roster
-	roster = players.GetNortheastTeamNames()
-	json.NewEncoder(w).Encode(roster)
-}
-
-func getSeTeams(w http.ResponseWriter, r *http.Request) {
-	var roster players.Roster
-	roster = players.GetSoutheastTeamNames()
-	json.NewEncoder(w).Encode(roster)
-}
-
-func getMwRosters(w http.ResponseWriter, r *http.Request) {
-	var roster rosters.Team
-	roster = rosters.GetMidwestTeamRosters()
-	json.NewEncoder(w).Encode(roster)
-}
-
-func getNeRosters(w http.ResponseWriter, r *http.Request) {
-	var roster rosters.Team
-	roster = rosters.GetNortheastTeamRosters()
-	json.NewEncoder(w).Encode(roster)
-}
-
-func getWRosters(w http.ResponseWriter, r *http.Request) {
-	var roster rosters.Team
-	roster = rosters.GetWestTeamRosters()
-	json.NewEncoder(w).Encode(roster)
-}
-
-func getSeRosters(w http.ResponseWriter, r *http.Request) {
-	var roster rosters.Team
-	roster = rosters.GetSoutheastTeamRosters()
-	json.NewEncoder(w).Encode(roster)
-}
-
-func getDailyTrendAdd(w http.ResponseWriter, r *http.Request) {
-	var daily trending.DayAdd
-	daily = trending.DailyAdd()
-	json.NewEncoder(w).Encode(daily)
-}
-
-func getDailyTrendDrop(w http.ResponseWriter, r *http.Request) {
-	var daily trending.DayDrop
-	daily = trending.DailyDrop()
-	json.NewEncoder(w).Encode(daily)
-}
-
-func getWeeklyTrendAdd(w http.ResponseWriter, r *http.Request) {
-	var weekly trending.WeekAdd
-	weekly = trending.WeeklyAdd()
-	json.NewEncoder(w).Encode(weekly)
-}
-
-func getWeeklyTrendDrop(w http.ResponseWriter, r *http.Request) {
-	var weekly trending.WeekDrop
-	weekly = trending.WeeklyDrop()
-	json.NewEncoder(w).Encode(weekly)
-}
-
 func postTweet(w http.ResponseWriter, r *http.Request) {
 	var body []byte
 
@@ -316,18 +244,18 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/bdayemail", email.GetBdayEmail)
 	myRouter.HandleFunc("/austinapi/botsffl", botsffl.GetBotsFFL).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl", botsffl.PostBotsFFL).Methods("POST")
-	myRouter.HandleFunc("/austinapi/botsffl/teams/midwest", getMwTeams).Methods("GET")
-	myRouter.HandleFunc("/austinapi/botsffl/teams/west", getWTeams).Methods("GET")
-	myRouter.HandleFunc("/austinapi/botsffl/teams/northeast", getNeTeams).Methods("GET")
-	myRouter.HandleFunc("/austinapi/botsffl/teams/southeast", getSeTeams).Methods("GET")
-	myRouter.HandleFunc("/austinapi/botsffl/teams/midwest/roster", getMwRosters).Methods("GET")
-	myRouter.HandleFunc("/austinapi/botsffl/teams/west/roster", getWRosters).Methods("GET")
-	myRouter.HandleFunc("/austinapi/botsffl/teams/northeast/roster", getNeRosters).Methods("GET")
-	myRouter.HandleFunc("/austinapi/botsffl/teams/southeast/roster", getSeRosters).Methods("GET")
-	myRouter.HandleFunc("/austinapi/botsffl/trending/daily/add", getDailyTrendAdd).Methods("GET")
-	myRouter.HandleFunc("/austinapi/botsffl/trending/daily/drop", getDailyTrendDrop).Methods("GET")
-	myRouter.HandleFunc("/austinapi/botsffl/trending/weekly/add", getWeeklyTrendAdd).Methods("GET")
-	myRouter.HandleFunc("/austinapi/botsffl/trending/weekly/drop", getWeeklyTrendDrop).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/midwest", players.GetMwTeams).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/west", players.GetWTeams).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/northeast", players.GetNeTeams).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/southeast", players.GetSeTeams).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/midwest/roster", rosters.GetMwRosters).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/west/roster", rosters.GetWRosters).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/northeast/roster", rosters.GetNeRosters).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/teams/southeast/roster", rosters.GetSeRosters).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/trending/daily/add", trending.GetDailyTrendAdd).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/trending/daily/drop", trending.GetDailyTrendDrop).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/trending/weekly/add", trending.GetWeeklyTrendAdd).Methods("GET")
+	myRouter.HandleFunc("/austinapi/botsffl/trending/weekly/drop", trending.GetWeeklyTrendDrop).Methods("GET")
 	myRouter.HandleFunc("/austinapi/current-stock-price", alp.Get).Methods("GET")
 	myRouter.HandleFunc("/austinapi/current-stock-price", alp.PostStockPrice).Methods("POST")
 	myRouter.HandleFunc("/austinapi/email", sendEmail).Methods("POST")
