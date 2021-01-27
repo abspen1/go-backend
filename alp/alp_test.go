@@ -18,3 +18,14 @@ func TestFloatToString(t *testing.T) {
 		}
 	}
 }
+
+func TestGetCurrentPrice(t *testing.T) {
+	resp := GetCurrentPrice("TSLA")
+	if resp == "500" || resp == "404" {
+		t.Errorf("Test failed to get current price. Received %s error.", resp)
+	}
+	resp = GetCurrentPrice("TLOASO")
+	if resp != "500" && resp != "404" {
+		t.Errorf("Test failed to get error. Received %s.", resp)
+	}
+}
