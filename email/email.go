@@ -86,7 +86,7 @@ func PostEmail(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Email not sent")
 }
 
-// PostBdayEmail func for sending email
+// PostBdayEmail func for sending bday reminder email
 func PostBdayEmail(w http.ResponseWriter, r *http.Request) {
 	var body []byte
 
