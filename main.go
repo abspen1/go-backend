@@ -29,7 +29,7 @@ import (
 
 func handleRequests() {
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"https://abspen1.github.io", "https://austinspencer.works"},
+		AllowedOrigins:   []string{"https://abspen1.github.io", "https://austinspencer.works", "https://captrack.laudecapital.com"},
 		AllowCredentials: true,
 		Debug:            false,
 	})
