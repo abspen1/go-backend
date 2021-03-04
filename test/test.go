@@ -6,6 +6,8 @@ import (
 	"net/smtp"
 	"os"
 
+	tracker "github.com/abspen1/restful-go/capital-tracker"
+
 	"github.com/abspen1/restful-go/todos"
 
 	"github.com/abspen1/restful-go/alp"
@@ -166,6 +168,13 @@ func testTodos() {
 func testAlp() {
 	resp := alp.GetCurrentPrice("TSLA")
 	fmt.Println(resp)
+}
+
+func testCC() {
+	var cc tracker.CoveredCall
+	cc.Stock = "TSLA"
+	cc.Close = "01/31/21"
+	resp := tracker.AddCoveredCall(cc)
 }
 
 func main() {
