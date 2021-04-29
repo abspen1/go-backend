@@ -174,7 +174,7 @@ func testCC() {
 	var cc tracker.CoveredCall
 	cc.Stock = "TSLA"
 	cc.Close = "01/31/21"
-	resp := tracker.AddCoveredCall(cc)
+	// resp := tracker.AddCoveredCall(cc)
 }
 
 func main() {
