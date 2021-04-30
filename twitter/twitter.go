@@ -48,6 +48,7 @@ func GetTwitterData() Data {
 	data.TweetsRead, _ = redis.Int(client.Do("GET", "read"))
 	data.LatestTweet, _ = redis.String(client.Do("GET", "recent"))
 	// data.Accuracy, _ = redis.String(client.Do("GET", "pct"))
-	fmt.Println(data)
+	// April 30th tweets read = 5458196
+	fmt.Println("Just pulled Twitter data for CloudBot")
 	return data
 }
