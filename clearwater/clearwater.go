@@ -14,11 +14,11 @@ import (
 //Trip struct
 type Trip struct {
 	Name      string
+	Email     string
 	StartDate string
 	EndDate   string
-	Email     string
-	Phone     string
 	Password  string
+	Color     string
 }
 
 // GetTrips func to get the current trips
@@ -87,7 +87,9 @@ func GetString() []string {
 		s = append(s, unencoded.StartDate)
 		s = append(s, unencoded.EndDate)
 		s = append(s, unencoded.Email)
-		s = append(s, unencoded.Phone)
+		s = append(s, unencoded.Name)
+		s = append(s, unencoded.Color)
+		s = append(s, unencoded.Password)
 		i++
 	}
 	return (s)
@@ -121,8 +123,10 @@ func RmString(trip Trip) bool {
 	proj2 := Trip{
 		StartDate: trip.StartDate,
 		EndDate:   trip.EndDate,
-		Phone:     trip.Phone,
 		Email:     trip.Email,
+		Name:      trip.Name,
+		Color:     trip.Color,
+		Password:  trip.Password,
 	}
 
 	fmt.Println(proj2)
