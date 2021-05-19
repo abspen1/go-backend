@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/abspen1/restful-go/clearwater"
 	"github.com/abspen1/restful-go/todos"
 	"github.com/abspen1/restful-go/twitter"
 
@@ -52,6 +53,9 @@ func handleRequests() {
 	myRouter.HandleFunc("/austinapi/botsffl/trending/daily/drop", trending.GetDailyTrendDrop).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl/trending/weekly/add", trending.GetWeeklyTrendAdd).Methods("GET")
 	myRouter.HandleFunc("/austinapi/botsffl/trending/weekly/drop", trending.GetWeeklyTrendDrop).Methods("GET")
+	myRouter.HandleFunc("/austinapi/clearwater/add", clearwater.PostTrips).Methods("POST")
+	myRouter.HandleFunc("/austinapi/clearwater/get", clearwater.GetTrips).Methods("GET")
+	myRouter.HandleFunc("/austinapi/clearwater/remove", clearwater.PostRemoveTrips).Methods("POST")
 	myRouter.HandleFunc("/austinapi/current-stock-price", alp.Get).Methods("GET")
 	myRouter.HandleFunc("/austinapi/current-stock-price", alp.PostStockPrice).Methods("POST")
 	myRouter.HandleFunc("/austinapi/email", email.PostEmail).Methods("POST")
