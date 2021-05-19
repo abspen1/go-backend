@@ -74,7 +74,7 @@ func GetString() []string {
 	// var unencoded *Trip
 
 	trips1, _ := redis.Strings(client.Do("SMEMBERS", "clearwater-trips"))
-	fmt.Println(trips1)
+	// fmt.Println(trips1)
 
 	// len, _ := redis.Int(client.Do("SCARD", "clearwater-trips"))
 
