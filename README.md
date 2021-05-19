@@ -20,6 +20,13 @@ Building a RESTful API using Go programming language. I love the combination of 
 - Back-end for my fantasy football league's hub [BOTS-FFL](https://austinspencer.works/BOTS-FFL)
 - This package is how I get the standings and point leaders on the website
 
+## 📁 clearwater
+
+- Folder with get and post requests for clearwater website
+- Stores specific JSON of data
+- May add a Python function that will check each morning if there is an upcoming date
+- If there is an upcoming date, send email to the email listed with information
+
 ## 📁 email
 
 - Package for the contact page on my website
