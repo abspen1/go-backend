@@ -71,28 +71,28 @@ func GetString() []string {
 		log.Fatal(err)
 	}
 
-	var unencoded *Trip
+	// var unencoded *Trip
 
-	project1, _ := redis.Strings(client.Do("SMEMBERS", "clearwater-trips"))
-	fmt.Println(project1)
+	trips1, _ := redis.Strings(client.Do("SMEMBERS", "clearwater-trips"))
+	fmt.Println(trips1)
 
-	len, _ := redis.Int(client.Do("SCARD", "clearwater-trips"))
+	// len, _ := redis.Int(client.Do("SCARD", "clearwater-trips"))
 
-	i := 0
+	// i := 0
 
-	var s []string
+	// var s []string
 
-	for i < len {
-		json.Unmarshal([]byte(project1[i]), &unencoded)
-		s = append(s, unencoded.StartDate)
-		s = append(s, unencoded.EndDate)
-		s = append(s, unencoded.Email)
-		s = append(s, unencoded.Name)
-		s = append(s, unencoded.Color)
-		s = append(s, unencoded.Password)
-		i++
-	}
-	return (s)
+	// for i < len {
+	// 	json.Unmarshal([]byte(trips1[i]), &unencoded)
+	// 	s = append(s, unencoded.StartDate)
+	// 	s = append(s, unencoded.EndDate)
+	// 	s = append(s, unencoded.Email)
+	// 	s = append(s, unencoded.Name)
+	// 	s = append(s, unencoded.Color)
+	// 	s = append(s, unencoded.Password)
+	// 	i++
+	// }
+	return (trips1)
 }
 
 // SetString function
