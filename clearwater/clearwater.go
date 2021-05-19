@@ -13,10 +13,12 @@ import (
 
 //Trip struct
 type Trip struct {
+	Name      string
 	StartDate string
 	EndDate   string
 	Email     string
 	Phone     string
+	Password  string
 }
 
 // GetTrips func to get the current trips
@@ -71,10 +73,10 @@ func GetString() []string {
 
 	var unencoded *Trip
 
-	project1, _ := redis.Strings(client.Do("SMEMBERS", "trips"))
+	project1, _ := redis.Strings(client.Do("SMEMBERS", "clearwater-trips"))
 	fmt.Println(project1)
 
-	len, _ := redis.Int(client.Do("SCARD", "trips"))
+	len, _ := redis.Int(client.Do("SCARD", "clearwater-trips"))
 
 	i := 0
 
@@ -102,7 +104,7 @@ func SetString(trip Trip) {
 	}
 
 	projEn, _ := json.Marshal(trip)
-	client.Do("SADD", "trips", projEn)
+	client.Do("SADD", "clearwater-trips", projEn)
 	fmt.Println("Added a new trip to clearwater DB")
 }
 
@@ -126,7 +128,7 @@ func RmString(trip Trip) bool {
 	fmt.Println(proj2)
 
 	projEn, _ := json.Marshal(proj2)
-	client.Do("SREM", "trips", projEn)
+	client.Do("SREM", "clearwater-trips", projEn)
 	fmt.Println("Removed trip from clearwater DB")
 	return true
 }
