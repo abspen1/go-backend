@@ -28,7 +28,7 @@ func sendConfirmation(trip Trip) {
 	url := "https://api.pepipost.com/v5/mail/send"
 	key := os.Getenv("api-key")
 
-	payload := strings.NewReader("{\"from\":{\"email\":\"clearwater.scheduling@austinspencer.works\",\"name\":\"Trip Confirmation\"},\"subject\":\"Your Clearwater trip info\",\"template_id\":28952,\"content\":[{\"type\":\"html\",\"value\":\"[%NAME%]\"}],\"personalizations\":[{\"attributes\":{\"NAME\":\"" + trip.Name + "\",\"START\":\"" + trip.StartDate + "\",\"END\":\"" + trip.EndDate + "\",\"ID\":\"" + trip.Password + "\"},\"to\":[{\"email\":\"abspencer2097@gmail.com\",\"name\":\"Austin Spencer\"}]}]}")
+	payload := strings.NewReader("{\"from\":{\"email\":\"clearwater.scheduling@austinspencer.works\",\"name\":\"Trip Confirmation\"},\"subject\":\"Your Clearwater trip info\",\"template_id\":28952,\"content\":[{\"type\":\"html\",\"value\":\"[%NAME%]\"}],\"personalizations\":[{\"attributes\":{\"NAME\":\"" + trip.Name + "\",\"START\":\"" + trip.StartDate + "\",\"END\":\"" + trip.EndDate + "\",\"ID\":\"" + trip.Password + "\"},\"to\":[{\"email\":\"" + trip.Email + "\",\"name\":\"" + trip.Name + "\"}]}]}")
 
 	req, _ := http.NewRequest("POST", url, payload)
 
