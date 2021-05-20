@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -20,11 +19,11 @@ func PostConfirm(w http.ResponseWriter, r *http.Request) {
 	}
 	var trip Trip
 	_ = json.Unmarshal(info, &trip)
-	sendConfirmation(trip)
-	fmt.Fprintf(w, "Success")
+	res := sendConfirmation(trip)
+	fmt.Fprintf(w, res)
 }
 
-func sendConfirmation(trip Trip) {
+func sendConfirmation(trip Trip) string {
 	url := "https://api.pepipost.com/v5/mail/send"
 	key := os.Getenv("api-key")
 
@@ -37,15 +36,15 @@ func sendConfirmation(trip Trip) {
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return "Error"
 	}
 
 	defer res.Body.Close()
-	body, _ := ioutil.ReadAll(res.Body)
+	_, err = ioutil.ReadAll(res.Body)
 
-	fmt.Print("Res: ")
-	fmt.Println(res)
-	fmt.Print("Body: ")
-	fmt.Println(string(body))
+	if err != nil {
+		return "Error"
+	}
+	return "Success"
 }
 
