@@ -29,7 +29,7 @@ func sendConfirmation(trip Trip) {
 	key := os.Getenv("api-key")
 
 	// payload := strings.NewReader("{\"from\":{\"email\":\"clearwater.scheduling@austinspencer.works\",\"name\":\"Trip Confirmation\"},\"subject\":\"Your Clearwater trip info\",\"content\":[{\"type\":\"html\",\"value\":\"Hello [%NAME%], your trip is scheduled for dates [%START%] to [%END%].\"},{\"type\":\"html\",\"value\":\"Be on the lookout for an email with further information when the start date of your trip gets closer.\"}],\"personalizations\":[{\"attributes\": {\"NAME\": \"" + trip.Name + "\",\"START\": \"" + trip.StartDate + "\",\"END\": \"" + trip.EndDate + "\"}\"to\":[{\"email\":\"" + trip.Email + "\",\"name\":\"" + trip.Name + "\"}]}]}")
-	payload := strings.NewReader("{\"from\":{\"email\":\"confirmation@pepisandbox.com\",\"name\":\"Flight confirmation\"},\"subject\":\"Your Barcelona flight e-ticket : BCN2118050657714\",\"content\":[{\"type\":\"html\",\"value\":\"Hello Lionel, Your flight for Barcelona is confirmed.\"}],\"personalizations\":[{\"to\":[{\"email\":\"abspencer2097@gmail.com\",\"name\":\"Austin Spencer\"}]}]}")
+	payload := strings.NewReader("{\"from\":{\"email\":\"clearwater.scheduling@austinspencer.works\",\"name\":\"Trip Confirmation\"},\"subject\":\"Your Clearwater trip info\",\"content\":[{\"type\":\"html\",\"value\":\"Hello [%NAME%], your trip is scheduled for dates [%START%] to [%END%].\"}],\"personalizations\":[{\"attributes\":{\"NAME\":\"Austin Spencer\",\"START\":\"start date\",\"END\":\"end date\"},\"to\":[{\"email\":\"abspencer2097@gmail.com\",\"name\":\"Austin Spencer\"}]}]}")
 
 	req, _ := http.NewRequest("POST", url, payload)
 
