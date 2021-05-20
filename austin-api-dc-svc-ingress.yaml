@@ -88,6 +88,11 @@ spec:
                 secretKeyRef:
                   key: APCA_API_SECRET_KEY
                   name: go-back-end
+            - name: api-key
+              valueFrom:
+                secretKeyRef:
+                  key: api-key
+                  name: python-emailer-secrets
 
 ---
 apiVersion: v1
