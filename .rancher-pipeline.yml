@@ -1,42 +1,42 @@
 stages:
-- name: Build
-  steps:
-  - runScriptConfig:
-      image: golang:1.11
-      shellScript: |-
-        mkdir -p /go/src/github.com/abspen1
-        ln -s `pwd` /go/src/github.com/abspen1/go-backend
-        cd /go/src/github.com/abspen1/go-backend
-        export GO111MODULE="on"
-        ls -l
-        go mod download
-        go build -o bin/main
-  when:
-    event:
-      include:
-      - push
-      - pull_request
-- name: Publish
-  steps:
-  - publishImageConfig:
-      dockerfilePath: ./Dockerfile
-      buildContext: .
-      tag: austin-api:${CICD_EXECUTION_SEQUENCE}
-  when:
-    event:
-      include:
-      - push
-      - pull_request
-- name: Deploy
-  steps:
-  - applyYamlConfig:
-      path: ./austin-api-dc-svc-ingress.yaml
-  when:
-    event:
-      include:
-      - push
-      - pull_request
+  - name: Build
+    steps:
+      - runScriptConfig:
+          image: golang:1.11
+          shellScript: |-
+            mkdir -p /go/src/github.com/abspen1
+            ln -s `pwd` /go/src/github.com/abspen1/go-backend
+            cd /go/src/github.com/abspen1/go-backend
+            export GO111MODULE="on"
+            ls -l
+            go mod download
+            go build -o bin/main
+    when:
+      event:
+        include:
+          - push
+          - pull_request
+  - name: Publish
+    steps:
+      - publishImageConfig:
+          dockerfilePath: ./Dockerfile
+          buildContext: .
+          tag: austin-api:v1.0
+    when:
+      event:
+        include:
+          - push
+          - pull_request
+  - name: Deploy
+    steps:
+      - applyYamlConfig:
+          path: ./austin-api-dc-svc-ingress.yaml
+    when:
+      event:
+        include:
+          - push
+          - pull_request
 branch:
   include:
-  - master
+    - master
 notification: {}

@@ -17,12 +17,14 @@ spec:
         - name: pipeline-docker-registry
       containers:
         - name: austinapi
-          image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
+          image: ${CICD_IMAGE}:v1.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8558
               protocol: TCP
           env:
+            - name: CICD_GIT_COMMIT
+              value: ${CICD_GIT_COMMIT}
             - name: REDIS_PASS
               valueFrom:
                 secretKeyRef:
